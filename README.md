@@ -11,7 +11,7 @@ A list of dishes available in a restaurant. Including items, categories and pict
 
 Before you start:
 
-- Install [.NET Core SDK](https://www.microsoft.com/net/download/windows/)
+- Install [.NET Core SDK](https://dotnet.microsoft.com/)
 - Install [PostgreSQL](https://www.postgresql.org/)
 - Install [VS Code](https://code.visualstudio.com/) (or your preferred editor)
 
