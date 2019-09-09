@@ -15,6 +15,22 @@ Before you start:
 - Install [PostgreSQL](https://www.postgresql.org/)
 - Install [VS Code](https://code.visualstudio.com/) (or your preferred editor)
 
+Create the database (Linux):
+
+```bash
+#file.conf
+
+PGHOST=""
+PGPORT=""
+PGUSER=""
+PGPASSWORD=""
+DBNAME=""
+```
+
+```bash
+bash .sh/db/create.sh /path/to/file.conf
+```
+
 ## Bugs and features
 
 Please, fell free to [open a new issue](https://github.com/storefront-community/menu-api/issues) on GitHub.
