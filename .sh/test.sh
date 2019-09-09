@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 solution_dir="src"
 api_project_dir="Storefront.Menu.API"
 test_project_dir="Storefront.Menu.Tests"
