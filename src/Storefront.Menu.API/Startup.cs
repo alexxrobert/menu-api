@@ -1,10 +1,10 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Storefront.Menu.API.Authorization;
 using Storefront.Menu.API.Models.DataModel;
 
 namespace Storefront.Menu.API
@@ -28,6 +28,10 @@ namespace Storefront.Menu.API
                     pgsql.MigrationsHistoryTable(tableName: "__migration_history", schema: ApiDbContext.Schema);
                 });
             });
+
+            services.AddMvc();
+            services.AddJwtAuthentication(_configuration.GetSection("Auth"));
+            services.AddDefaultCorsPolicy();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -37,10 +41,9 @@ namespace Storefront.Menu.API
                 app.UseDeveloperExceptionPage();
             }
 
-            app.Run(async (context) =>
-            {
-                await context.Response.WriteAsync("Hello World!");
-            });
+            app.UseCors();
+            app.UseAuthentication();
+            app.UseMvc();
         }
     }
 }
