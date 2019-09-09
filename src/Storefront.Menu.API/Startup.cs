@@ -32,6 +32,7 @@ namespace Storefront.Menu.API
 
             services.AddMvc();
             services.AddJwtAuthentication(_configuration.GetSection("Auth"));
+            services.AddDefaultCorsPolicy();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -41,6 +42,7 @@ namespace Storefront.Menu.API
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseCors();
             app.UseAuthentication();
             app.UseMvc();
         }
