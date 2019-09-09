@@ -7,7 +7,7 @@ A list of dishes available in a restaurant. Including items, categories and pict
 [![CircleCI](https://circleci.com/gh/storefront-community/menu-api.svg?style=shield)](https://circleci.com/gh/storefront-community/menu-api)
 [![codecov](https://codecov.io/gh/storefront-community/menu-api/branch/master/graph/badge.svg)](https://codecov.io/gh/storefront-community/menu-api)
 
-## How to debug locally
+## Debug locally
 
 Before you start:
 
@@ -22,4 +22,5 @@ Please, fell free to [open a new issue](https://github.com/storefront-community/
 ## License
 
 Code released under the [Apache License 2.0](https://github.com/storefront-community/menu-api/blob/master/LICENSE).  
-Developed and maintained by [Marx J. Moura](https://github.com/marxjmoura).
+
+Copyright (c) 2019-present, [Marx J. Moura](https://github.com/marxjmoura)
