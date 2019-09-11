@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Storefront.Menu.API.Authorization;
+using Storefront.Menu.API.Filters;
 using Storefront.Menu.API.Models.DataModel;
 
 namespace Storefront.Menu.API
@@ -29,7 +30,11 @@ namespace Storefront.Menu.API
                 });
             });
 
-            services.AddMvc();
+            services.AddMvc(options =>
+            {
+                options.Filters.Add(new RequestBodyValidationFilter());
+            });
+
             services.AddJwtAuthentication(_configuration.GetSection("Auth"));
             services.AddDefaultCorsPolicy();
         }
