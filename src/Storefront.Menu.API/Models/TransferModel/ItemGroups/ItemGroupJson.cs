@@ -4,7 +4,7 @@ using Storefront.Menu.API.Models.DataModel.ItemGroups;
 
 namespace Storefront.Menu.API.Models.TransferModel.ItemGroups
 {
-    public class ItemGroupJson : IActionResult
+    public sealed class ItemGroupJson : IActionResult
     {
         public ItemGroupJson() { }
 

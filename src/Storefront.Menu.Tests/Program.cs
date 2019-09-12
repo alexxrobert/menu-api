@@ -6,7 +6,7 @@ using Microsoft.Extensions.FileProviders;
 
 namespace Storefront.Menu.Tests
 {
-    public class Program
+    public sealed class Program
     {
         private readonly IConfiguration _configuration;
 

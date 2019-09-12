@@ -3,7 +3,7 @@ using Storefront.Menu.API.Models.DataModel.ItemGroups;
 
 namespace Storefront.Menu.API.Models.TransferModel.ItemGroups
 {
-    public class SaveItemGroupJson
+    public sealed class SaveItemGroupJson
     {
         [Required, MaxLength(50)]
         public string Title { get; set; }
