@@ -10,18 +10,18 @@ namespace Storefront.Menu.Tests.Functional.ItemGroups
 {
     public sealed class CreateItemGroupTest
     {
-        private readonly ApiServer _server;
+        private readonly FakeApiServer _server;
 
         public CreateItemGroupTest()
         {
-            _server = new ApiServer();
+            _server = new FakeApiServer();
         }
 
         [Fact]
         public async Task ShouldCreateSuccessfully()
         {
-            var token = new ApiToken(_server.JwtOptions);
-            var client = new ApiClient(_server, token);
+            var token = new FakeApiToken(_server.JwtOptions);
+            var client = new FakeApiClient(_server, token);
 
             var path = "/item-groups";
             var jsonRequest = new SaveItemGroupJson().Build();

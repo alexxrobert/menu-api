@@ -8,11 +8,11 @@ using Newtonsoft.Json.Linq;
 
 namespace Storefront.Menu.Tests.Fakes
 {
-    public sealed class ApiClient
+    public sealed class FakeApiClient
     {
         private readonly HttpClient _client;
 
-        public ApiClient(TestServer server, ApiToken token = null)
+        public FakeApiClient(TestServer server, FakeApiToken token = null)
         {
             _client = server.CreateClient();
 

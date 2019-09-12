@@ -11,18 +11,18 @@ namespace Storefront.Menu.Tests.Functional.ItemGroups
 {
     public sealed class UpdateItemGroupTest
     {
-        private readonly ApiServer _server;
+        private readonly FakeApiServer _server;
 
         public UpdateItemGroupTest()
         {
-            _server = new ApiServer();
+            _server = new FakeApiServer();
         }
 
         [Fact]
         public async Task ShouldUpdateSuccessfully()
         {
-            var token = new ApiToken(_server.JwtOptions);
-            var client = new ApiClient(_server, token);
+            var token = new FakeApiToken(_server.JwtOptions);
+            var client = new FakeApiClient(_server, token);
 
             var itemGroup = new ItemGroup().Of(token.TenantId);
 
@@ -44,8 +44,8 @@ namespace Storefront.Menu.Tests.Functional.ItemGroups
         [Fact]
         public async Task ShouldRespond422ForInexistentId()
         {
-            var token = new ApiToken(_server.JwtOptions);
-            var client = new ApiClient(_server, token);
+            var token = new FakeApiToken(_server.JwtOptions);
+            var client = new FakeApiClient(_server, token);
 
             var path = "/item-groups/5";
             var jsonRequest = new SaveItemGroupJson().Build();

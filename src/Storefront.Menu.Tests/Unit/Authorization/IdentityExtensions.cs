@@ -7,17 +7,17 @@ namespace Storefront.Menu.Tests.Unit.Authorization
 {
     public sealed class IdentityExtensions
     {
-        private readonly ApiServer _server;
+        private readonly FakeApiServer _server;
 
         public IdentityExtensions()
         {
-            _server = new ApiServer();
+            _server = new FakeApiServer();
         }
 
         [Fact]
         public void ShouldGetIdFromClaims()
         {
-            var token = new ApiToken(_server.JwtOptions)
+            var token = new FakeApiToken(_server.JwtOptions)
             {
                 TenantId = 20,
                 UserId = 50

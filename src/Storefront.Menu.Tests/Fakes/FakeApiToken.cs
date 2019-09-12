@@ -7,11 +7,11 @@ using Storefront.Menu.API.Authorization;
 
 namespace Storefront.Menu.Tests.Fakes
 {
-    public sealed class ApiToken
+    public sealed class FakeApiToken
     {
         private JwtOptions _jwtOptions;
 
-        public ApiToken(JwtOptions jwtOptions)
+        public FakeApiToken(JwtOptions jwtOptions)
         {
             _jwtOptions = jwtOptions;
         }
