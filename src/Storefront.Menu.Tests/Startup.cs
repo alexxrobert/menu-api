@@ -5,6 +5,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Storefront.Menu.API.Authorization;
 using Storefront.Menu.API.Filters;
 using Storefront.Menu.API.Models.DataModel;
+using Storefront.Menu.API.Models.IntegrationModel.EventBus;
+using Storefront.Menu.Tests.Fakes;
 
 namespace Storefront.Menu.Tests
 {
@@ -31,8 +33,9 @@ namespace Storefront.Menu.Tests
             });
 
             services.AddDefaultCorsPolicy();
-
             services.AddJwtAuthentication(_configuration.GetSection("Auth"));
+
+            services.AddSingleton<IEventBus, FakeEventBus>();
         }
 
         public void Configure(IApplicationBuilder app)

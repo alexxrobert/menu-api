@@ -7,6 +7,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Storefront.Menu.API.Authorization;
 using Storefront.Menu.API.Filters;
 using Storefront.Menu.API.Models.DataModel;
+using Storefront.Menu.API.Models.IntegrationModel.EventBus;
+using Storefront.Menu.API.Models.IntegrationModel.EventBus.RabbitMQ;
 
 namespace Storefront.Menu.API
 {
@@ -35,8 +37,10 @@ namespace Storefront.Menu.API
                 options.Filters.Add(new RequestBodyValidationFilter());
             });
 
-            services.AddJwtAuthentication(_configuration.GetSection("Auth"));
             services.AddDefaultCorsPolicy();
+            services.AddJwtAuthentication(_configuration.GetSection("Auth"));
+
+            services.AddScoped<IEventBus, RabbitMQEventBus>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
