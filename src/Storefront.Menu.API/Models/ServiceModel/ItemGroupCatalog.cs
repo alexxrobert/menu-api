@@ -31,8 +31,7 @@ namespace Storefront.Menu.API.Models.ServiceModel
         public async Task Find(long tenantId, long itemGroupId)
         {
             ItemGroup = await _dbContext.ItemGroups
-                .WhereTenantId(tenantId)
-                .WhereId(itemGroupId)
+                .WhereId(tenantId, itemGroupId)
                 .SingleOrDefaultAsync();
 
             GroupNotExists = ItemGroup == null;
@@ -50,7 +49,7 @@ namespace Storefront.Menu.API.Models.ServiceModel
             if (GroupNotExists) return;
 
             GroupHasItems = await _dbContext.Items
-                .WhereItemGroupId(ItemGroup.Id)
+                .WhereItemGroupId(ItemGroup.TenantId, ItemGroup.Id)
                 .AnyAsync();
 
             if (GroupHasItems) return;

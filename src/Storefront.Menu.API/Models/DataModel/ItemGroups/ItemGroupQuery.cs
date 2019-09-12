@@ -11,9 +11,9 @@ namespace Storefront.Menu.API.Models.DataModel.ItemGroups
             return itemGroups.Where(itemGroup => itemGroup.TenantId == tenantId);
         }
 
-        public static IQueryable<ItemGroup> WhereId(this IQueryable<ItemGroup> itemGroups, long id)
+        public static IQueryable<ItemGroup> WhereId(this IQueryable<ItemGroup> itemGroups, long tenantId, long id)
         {
-            return itemGroups.Where(itemGroup => itemGroup.Id == id);
+            return itemGroups.WhereTenantId(tenantId).Where(itemGroup => itemGroup.Id == id);
         }
 
         public static IQueryable<ItemGroup> WhereTitleContains(this IQueryable<ItemGroup> itemGroups, string title)
