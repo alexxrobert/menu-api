@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Reflection;
 using Microsoft.AspNetCore.Builder;
@@ -8,6 +9,7 @@ using Swashbuckle.AspNetCore.SwaggerUI;
 
 namespace Storefront.Menu.API.Extensions
 {
+    [ExcludeFromCodeCoverage]
     public static class SwaggerExtensions
     {
         public static void AddSwaggerDocumentation(this IServiceCollection services)
