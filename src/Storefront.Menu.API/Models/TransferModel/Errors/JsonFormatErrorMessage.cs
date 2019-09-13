@@ -32,7 +32,7 @@ namespace Storefront.Menu.API.Models.TransferModel.Errors
 
                 if (matches.Any())
                 {
-                    return $"Parse error: {matches.Distinct().First().Value}";
+                    return $"Parse error: {matches.First().Value}";
                 }
             }
 
