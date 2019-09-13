@@ -54,7 +54,7 @@ namespace Storefront.Menu.API.Controllers
 
             var count = await itemGroupQuery.CountAsync();
 
-            return new ItemGroupListJson(itemGroups);
+            return new ItemGroupListJson(itemGroups, count);
         }
 
         [HttpPost, Route("")]

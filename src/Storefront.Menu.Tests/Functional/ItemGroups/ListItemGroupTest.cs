@@ -34,6 +34,7 @@ namespace Storefront.Menu.Tests.Functional.ItemGroups
             var jsonResponse = await client.ReadJsonAsync<ItemGroupListJson>(response);
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.Equal(2, jsonResponse.Count);
             Assert.Contains(jsonResponse.ItemGroups, json => json.Id == itemGroup1.Id);
             Assert.Contains(jsonResponse.ItemGroups, json => json.Id == itemGroup2.Id);
         }
@@ -55,6 +56,7 @@ namespace Storefront.Menu.Tests.Functional.ItemGroups
             var jsonResponse = await client.ReadJsonAsync<ItemGroupListJson>(response);
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.Equal(1, jsonResponse.Count);
             Assert.Contains(jsonResponse.ItemGroups, json => json.Id == itemGroup1.Id);
             Assert.DoesNotContain(jsonResponse.ItemGroups, json => json.Id == itemGroup2.Id);
         }

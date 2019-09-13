@@ -10,14 +10,17 @@ namespace Storefront.Menu.API.Models.TransferModel.ItemGroups
     {
         public ItemGroupListJson() { }
 
-        public ItemGroupListJson(ICollection<ItemGroup> itemGroups)
+        public ItemGroupListJson(ICollection<ItemGroup> itemGroups, long count)
         {
             ItemGroups = itemGroups
                 .Select(itemGroup => new ItemGroupJson(itemGroup))
                 .ToList();
+
+            Count = count;
         }
 
         public ICollection<ItemGroupJson> ItemGroups { get; set; }
+        public long Count { get; set; }
 
         public async Task ExecuteResultAsync(ActionContext context)
         {
