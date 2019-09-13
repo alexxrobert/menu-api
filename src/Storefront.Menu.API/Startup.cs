@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Storefront.Menu.API.Authorization;
+using Storefront.Menu.API.Extensions;
 using Storefront.Menu.API.Filters;
 using Storefront.Menu.API.Models.DataModel;
 using Storefront.Menu.API.Models.IntegrationModel.EventBus;
@@ -39,6 +40,7 @@ namespace Storefront.Menu.API
 
             services.AddDefaultCorsPolicy();
             services.AddJwtAuthentication(_configuration.GetSection("Auth"));
+            services.AddSwaggerDocumentation();
 
             services.AddScoped<IEventBus, RabbitMQEventBus>();
         }
@@ -51,6 +53,7 @@ namespace Storefront.Menu.API
             }
 
             app.UseCors();
+            app.UseSwaggerDocumentation();
             app.UseAuthentication();
             app.UseMvc();
         }

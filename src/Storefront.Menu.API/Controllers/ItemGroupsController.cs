@@ -12,7 +12,13 @@ using Storefront.Menu.API.Models.TransferModel.ItemGroups;
 
 namespace Storefront.Menu.API.Controllers
 {
+    /// <summary>
+    /// Group of items having particular shared characteristics.
+    /// </summary>
+    [ApiExplorerSettings(GroupName = "Item groups")]
     [Route("item-groups"), Authorize]
+    [Consumes("application/json")]
+    [Produces("application/json")]
     public sealed class ItemGroupsController : Controller
     {
         private readonly ApiDbContext _dbContext;
@@ -24,7 +30,16 @@ namespace Storefront.Menu.API.Controllers
             _eventBus = eventBus;
         }
 
+        /// <summary>
+        /// Find an item group by ID.
+        /// </summary>
+        /// <param name="id">Item group ID.</param>
+        /// <returns>Returns item group data.</returns>
+        /// <response code="200">Item group data</response>
+        /// <response code="422">Error: ITEM_GROUP_NOT_FOUND</response>
         [HttpGet, Route("{id:long}")]
+        [ProducesResponseType(statusCode: 200, type: typeof(ItemGroupJson))]
+        [ProducesResponseType(statusCode: 422, type: typeof(ItemGroupNotFoundError))]
         public async Task<IActionResult> Find([FromRoute] long id)
         {
             var catalog = new ItemGroupCatalog(_dbContext, _eventBus);
@@ -40,7 +55,14 @@ namespace Storefront.Menu.API.Controllers
             return new ItemGroupJson(catalog.ItemGroup);
         }
 
+        /// <summary>
+        /// List item groups ordered by title. Search by: title.
+        /// </summary>
+        /// <param name="query">URL query sring parameters.</param>
+        /// <returns>List of item groups</returns>
+        /// <response code="200">Search result</response>
         [HttpGet, Route("")]
+        [ProducesResponseType(statusCode: 200, type: typeof(ItemGroupListJson))]
         public async Task<IActionResult> List([FromQuery] ItemGroupListQuery query)
         {
             var itemGroupQuery = _dbContext.ItemGroups
@@ -57,7 +79,14 @@ namespace Storefront.Menu.API.Controllers
             return new ItemGroupListJson(itemGroups, count);
         }
 
+        /// <summary>
+        /// Create an item group.
+        /// </summary>
+        /// <param name="json">Item group data.</param>
+        /// <returns>Created item group.</returns>
+        /// <response code="200">Item group data</response>
         [HttpPost, Route("")]
+        [ProducesResponseType(statusCode: 200, type: typeof(ItemGroupListJson))]
         public async Task<IActionResult> Create([FromBody] SaveItemGroupJson json)
         {
             var catalog = new ItemGroupCatalog(_dbContext, _eventBus);
@@ -72,7 +101,17 @@ namespace Storefront.Menu.API.Controllers
             return new ItemGroupJson(catalog.ItemGroup);
         }
 
+        /// <summary>
+        /// Update an item group.
+        /// </summary>
+        /// <param name="id">Item group ID.</param>
+        /// <param name="json">Item group data.</param>
+        /// <returns>Updated item group</returns>
+        /// <response code="200">Item group data</response>
+        /// <response code="422">Error: ITEM_GROUP_NOT_FOUND</response>
         [HttpPut, Route("{id:long}")]
+        [ProducesResponseType(statusCode: 200, type: typeof(ItemGroupJson))]
+        [ProducesResponseType(statusCode: 422, type: typeof(ItemGroupNotFoundError))]
         public async Task<IActionResult> Update([FromRoute] long id, [FromBody] SaveItemGroupJson json)
         {
             var catalog = new ItemGroupCatalog(_dbContext, _eventBus);
@@ -92,7 +131,16 @@ namespace Storefront.Menu.API.Controllers
             return new ItemGroupJson(catalog.ItemGroup);
         }
 
+        /// <summary>
+        /// Delete an item group.
+        /// </summary>
+        /// <param name="id">Item group ID.</param>
+        /// <returns>No content</returns>
+        /// <response code="200">Item group data</response>
+        /// <response code="422">Error: ITEM_GROUP_NOT_FOUND</response>
         [HttpDelete, Route("{id:long}")]
+        [ProducesResponseType(statusCode: 200, type: typeof(ItemGroupJson))]
+        [ProducesResponseType(statusCode: 422, type: typeof(ItemGroupNotFoundError))]
         public async Task<IActionResult> Delete([FromRoute] long id)
         {
             var catalog = new ItemGroupCatalog(_dbContext, _eventBus);

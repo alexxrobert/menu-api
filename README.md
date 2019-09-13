@@ -7,6 +7,10 @@ A list of dishes available in a restaurant. Including items, categories and pict
 [![CircleCI](https://circleci.com/gh/storefront-community/menu-api.svg?style=shield)](https://circleci.com/gh/storefront-community/menu-api)
 [![codecov](https://codecov.io/gh/storefront-community/menu-api/branch/master/graph/badge.svg)](https://codecov.io/gh/storefront-community/menu-api)
 
+## Documentation
+
+API documentation written with Swagger and available at the root URL (no route prefix).
+
 ## Debug locally
 
 Before you start:
