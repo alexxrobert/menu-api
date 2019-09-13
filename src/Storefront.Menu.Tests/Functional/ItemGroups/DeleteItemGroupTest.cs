@@ -62,7 +62,7 @@ namespace Storefront.Menu.Tests.Functional.ItemGroups
 
             Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
             Assert.Equal(payload.Id, itemGroup.Id);
-            Assert.Equal(payload.TenantId, itemGroup.Id);
+            Assert.Equal(payload.TenantId, itemGroup.TenantId);
             Assert.Equal(payload.Title, itemGroup.Title);
             Assert.Equal(payload.PictureFileId, itemGroup.PictureFileId);
         }

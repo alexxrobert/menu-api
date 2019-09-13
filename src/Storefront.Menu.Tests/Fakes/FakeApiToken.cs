@@ -14,10 +14,15 @@ namespace Storefront.Menu.Tests.Fakes
         public FakeApiToken(JwtOptions jwtOptions)
         {
             _jwtOptions = jwtOptions;
+
+            var random = new Random();
+
+            TenantId = random.Next(1, int.MaxValue);
+            UserId = random.Next(1, int.MaxValue);
         }
 
-        public long TenantId { get; set; } = 10;
-        public long UserId { get; set; } = 1;
+        public long TenantId { get; set; }
+        public long UserId { get; set; }
 
         public override string ToString()
         {
