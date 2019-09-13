@@ -18,6 +18,10 @@ Before you start:
 Create the database (Linux):
 
 ```bash
+bash .sh/db/create.sh /path/to/file.conf
+```
+
+```bash
 #file.conf
 
 PGHOST=""
@@ -25,10 +29,6 @@ PGPORT=""
 PGUSER=""
 PGPASSWORD=""
 DBNAME=""
-```
-
-```bash
-bash .sh/db/create.sh /path/to/file.conf
 ```
 
 ## Bugs and features
