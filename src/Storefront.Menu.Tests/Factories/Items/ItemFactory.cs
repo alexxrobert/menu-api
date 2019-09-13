@@ -9,7 +9,7 @@ namespace Storefront.Menu.Tests.Factories.Items
         public static Item To(this Item item, ItemGroup itemGroup)
         {
             item.Name = ConstantFactory.Text();
-            item.Description = ConstantFactory.Text(50, 6);
+            item.Description = ConstantFactory.Text(length: 50, wordCount: 6);
             item.PictureFileId = Guid.NewGuid().ToString();
             item.Price = 5;
             item.ItemGroup = itemGroup;

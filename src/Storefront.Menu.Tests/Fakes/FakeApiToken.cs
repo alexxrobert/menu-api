@@ -16,7 +16,7 @@ namespace Storefront.Menu.Tests.Fakes
             _jwtOptions = jwtOptions;
         }
 
-        public long TenantId { get; set; } = 1;
+        public long TenantId { get; set; } = 10;
         public long UserId { get; set; } = 1;
 
         public override string ToString()
