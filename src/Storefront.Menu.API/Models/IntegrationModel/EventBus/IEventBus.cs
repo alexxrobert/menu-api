@@ -4,6 +4,6 @@ namespace Storefront.Menu.API.Models.IntegrationModel.EventBus
 {
     public interface IEventBus
     {
-         void Publish(IEvent @event);
+        void Publish(IEvent @event);
     }
 }

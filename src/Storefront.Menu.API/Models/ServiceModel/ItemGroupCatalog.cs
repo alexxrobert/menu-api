@@ -3,16 +3,20 @@ using Microsoft.EntityFrameworkCore;
 using Storefront.Menu.API.Models.DataModel;
 using Storefront.Menu.API.Models.DataModel.ItemGroups;
 using Storefront.Menu.API.Models.DataModel.Items;
+using Storefront.Menu.API.Models.EventModel.Published.ItemGroups;
+using Storefront.Menu.API.Models.IntegrationModel.EventBus;
 
 namespace Storefront.Menu.API.Models.ServiceModel
 {
     public sealed class ItemGroupCatalog
     {
         private readonly ApiDbContext _dbContext;
+        private readonly IEventBus _eventBus;
 
-        public ItemGroupCatalog(ApiDbContext dbContext)
+        public ItemGroupCatalog(ApiDbContext dbContext, IEventBus eventBus)
         {
             _dbContext = dbContext;
+            _eventBus = eventBus;
         }
 
         public ItemGroup ItemGroup { get; private set; }
@@ -26,6 +30,8 @@ namespace Storefront.Menu.API.Models.ServiceModel
             _dbContext.Add(ItemGroup);
 
             await _dbContext.SaveChangesAsync();
+
+            _eventBus.Publish(new ItemGroupCreatedEvent(ItemGroup));
         }
 
         public async Task Find(long tenantId, long itemGroupId)
@@ -42,6 +48,8 @@ namespace Storefront.Menu.API.Models.ServiceModel
             if (GroupNotExists) return;
 
             await _dbContext.SaveChangesAsync();
+
+            _eventBus.Publish(new ItemGroupUpdatedEvent(ItemGroup));
         }
 
         public async Task Delete()
@@ -57,6 +65,8 @@ namespace Storefront.Menu.API.Models.ServiceModel
             _dbContext.ItemGroups.Remove(ItemGroup);
 
             await _dbContext.SaveChangesAsync();
+
+            _eventBus.Publish(new ItemGroupDeletedEvent(ItemGroup));
         }
     }
 }

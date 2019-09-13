@@ -1,8 +1,10 @@
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Storefront.Menu.API.Models.DataModel.ItemGroups;
 using Storefront.Menu.API.Models.DataModel.Items;
+using Storefront.Menu.API.Models.EventModel.Published.ItemGroups;
 using Storefront.Menu.API.Models.TransferModel.Errors;
 using Storefront.Menu.Tests.Factories.ItemGroups;
 using Storefront.Menu.Tests.Factories.Items;
@@ -39,6 +41,30 @@ namespace Storefront.Menu.Tests.Functional.ItemGroups
 
             Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
             Assert.True(hasBeenDeleted);
+        }
+
+        [Fact]
+        public async Task ShouldPublishEventAfterDeleteSuccessfully()
+        {
+            var token = new FakeApiToken(_server.JwtOptions);
+            var client = new FakeApiClient(_server, token);
+
+            var itemGroup = new ItemGroup().Of(token.TenantId);
+
+            _server.Database.ItemGroups.Add(itemGroup);
+            await _server.Database.SaveChangesAsync();
+
+            var path = $"/item-groups/{itemGroup.Id}";
+            var response = await client.DeleteAsync(path);
+            var publishedEvent = _server.EventBus.PublishedEvents
+                .Single(@event => @event.Name == "menu.itemgroup.deleted");
+            var payload = (ItemGroupPayload)publishedEvent.Payload;
+
+            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+            Assert.Equal(payload.Id, itemGroup.Id);
+            Assert.Equal(payload.TenantId, itemGroup.Id);
+            Assert.Equal(payload.Title, itemGroup.Title);
+            Assert.Equal(payload.PictureFileId, itemGroup.PictureFileId);
         }
 
         [Fact]

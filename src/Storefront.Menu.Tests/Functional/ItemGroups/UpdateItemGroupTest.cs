@@ -1,6 +1,8 @@
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Storefront.Menu.API.Models.DataModel.ItemGroups;
+using Storefront.Menu.API.Models.EventModel.Published.ItemGroups;
 using Storefront.Menu.API.Models.TransferModel.Errors;
 using Storefront.Menu.API.Models.TransferModel.ItemGroups;
 using Storefront.Menu.Tests.Factories.ItemGroups;
@@ -39,6 +41,33 @@ namespace Storefront.Menu.Tests.Functional.ItemGroups
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             Assert.Equal(token.TenantId, itemGroup.TenantId);
             Assert.Equal(jsonRequest.Title, itemGroup.Title);
+        }
+
+        [Fact]
+        public async Task ShouldPublishEventAfterUpdateSuccessfully()
+        {
+            var token = new FakeApiToken(_server.JwtOptions);
+            var client = new FakeApiClient(_server, token);
+
+            var itemGroup = new ItemGroup().Of(token.TenantId);
+
+            _server.Database.ItemGroups.Add(itemGroup);
+            await _server.Database.SaveChangesAsync();
+
+            var path = $"/item-groups/{itemGroup.Id}";
+            var jsonRequest = new SaveItemGroupJson().Build();
+            var response = await client.PutJsonAsync(path, jsonRequest);
+            var publishedEvent = _server.EventBus.PublishedEvents
+                .Single(@event => @event.Name == "menu.itemgroup.updated");
+            var payload = (ItemGroupPayload)publishedEvent.Payload;
+
+            await _server.Database.Entry(itemGroup).ReloadAsync();
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.Equal(payload.Id, itemGroup.Id);
+            Assert.Equal(payload.TenantId, itemGroup.Id);
+            Assert.Equal(payload.Title, itemGroup.Title);
+            Assert.Equal(payload.PictureFileId, itemGroup.PictureFileId);
         }
 
         [Fact]

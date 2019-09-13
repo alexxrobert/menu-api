@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Storefront.Menu.API.Authorization;
 using Storefront.Menu.API.Models.DataModel;
 using Storefront.Menu.API.Models.DataModel.ItemGroups;
+using Storefront.Menu.API.Models.IntegrationModel.EventBus;
 using Storefront.Menu.API.Models.ServiceModel;
 using Storefront.Menu.API.Models.TransferModel.ItemGroups;
 
@@ -15,16 +16,18 @@ namespace Storefront.Menu.API.Controllers
     public sealed class ItemGroupsController : Controller
     {
         private readonly ApiDbContext _dbContext;
+        private readonly IEventBus _eventBus;
 
-        public ItemGroupsController(ApiDbContext dbContext)
+        public ItemGroupsController(ApiDbContext dbContext, IEventBus eventBus)
         {
             _dbContext = dbContext;
+            _eventBus = eventBus;
         }
 
         [HttpGet, Route("{id:long}")]
         public async Task<IActionResult> Find([FromRoute] long id)
         {
-            var catalog = new ItemGroupCatalog(_dbContext);
+            var catalog = new ItemGroupCatalog(_dbContext, _eventBus);
             var tenantId = User.Claims.TenantId();
 
             await catalog.Find(tenantId, id);
@@ -57,7 +60,7 @@ namespace Storefront.Menu.API.Controllers
         [HttpPost, Route("")]
         public async Task<IActionResult> Create([FromBody] SaveItemGroupJson json)
         {
-            var catalog = new ItemGroupCatalog(_dbContext);
+            var catalog = new ItemGroupCatalog(_dbContext, _eventBus);
 
             var itemGroup = json.MapTo(new ItemGroup
             {
@@ -72,7 +75,7 @@ namespace Storefront.Menu.API.Controllers
         [HttpPut, Route("{id:long}")]
         public async Task<IActionResult> Update([FromRoute] long id, [FromBody] SaveItemGroupJson json)
         {
-            var catalog = new ItemGroupCatalog(_dbContext);
+            var catalog = new ItemGroupCatalog(_dbContext, _eventBus);
             var tenantId = User.Claims.TenantId();
 
             await catalog.Find(tenantId, id);
@@ -92,7 +95,7 @@ namespace Storefront.Menu.API.Controllers
         [HttpDelete, Route("{id:long}")]
         public async Task<IActionResult> Delete([FromRoute] long id)
         {
-            var catalog = new ItemGroupCatalog(_dbContext);
+            var catalog = new ItemGroupCatalog(_dbContext, _eventBus);
             var tenantId = User.Claims.TenantId();
 
             await catalog.Find(tenantId, id);
