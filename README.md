@@ -16,13 +16,18 @@ API documentation written with Swagger and available at the root URL (no route p
 Before you start:
 
 - Install [.NET Core SDK](https://dotnet.microsoft.com/)
-- Install [PostgreSQL](https://www.postgresql.org/)
+- Install [PostgreSQL](https://www.postgresql.org/) or
+  [SQL Server](https://www.microsoft.com/en-us/sql-server/sql-server-downloads/)
 - Install [VS Code](https://code.visualstudio.com/) (or your preferred editor)
 
-Create the database (Linux):
+To create/drop a PotgreSQL database on Linux:
 
 ```bash
-bash .sh/db/create.sh /path/to/file.conf
+# Create database:
+bash .sh/db/postgresql/create.sh /path/to/file.conf
+
+# Drop database:
+bash .sh/db/postgresql/drop.sh /path/to/file.conf
 ```
 
 ```bash
