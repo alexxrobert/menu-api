@@ -45,8 +45,6 @@ namespace Storefront.Menu.API.Models.ServiceModel
 
         public async Task Update()
         {
-            if (GroupNotExists) return;
-
             await _dbContext.SaveChangesAsync();
 
             _eventBus.Publish(new ItemGroupUpdatedEvent(ItemGroup));
@@ -54,8 +52,6 @@ namespace Storefront.Menu.API.Models.ServiceModel
 
         public async Task Delete()
         {
-            if (GroupNotExists) return;
-
             GroupHasItems = await _dbContext.Items
                 .WhereItemGroupId(ItemGroup.TenantId, ItemGroup.Id)
                 .AnyAsync();

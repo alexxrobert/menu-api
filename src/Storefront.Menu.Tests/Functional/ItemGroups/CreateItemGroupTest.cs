@@ -45,7 +45,6 @@ namespace Storefront.Menu.Tests.Functional.ItemGroups
             var path = "/item-groups";
             var jsonRequest = new SaveItemGroupJson().Build();
             var response = await client.PostJsonAsync(path, jsonRequest);
-            var jsonResponse = await client.ReadJsonAsync<ItemGroupJson>(response);
             var itemGroup = await _server.Database.ItemGroups.SingleAsync();
             var publishedEvent = _server.EventBus.PublishedEvents
                 .Single(@event => @event.Name == "menu.itemgroup.created");

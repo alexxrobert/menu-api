@@ -2,7 +2,7 @@ using Storefront.Menu.API.Models.DataModel.Items;
 
 namespace Storefront.Menu.API.Models.EventModel.Published.Items
 {
-    public sealed class ItemDeletedEvent : IntegrationEvent<ItemPayload>
+    public sealed class ItemDeletedEvent : Event<ItemPayload>
     {
         public ItemDeletedEvent(Item item)
         {

@@ -4,15 +4,11 @@ using Storefront.Menu.API.Models.TransferModel.Errors;
 
 namespace Storefront.Menu.API.Filters
 {
-    public sealed class RequestBodyValidationFilter : ActionFilterAttribute
+    public sealed class JsonFormatValidationFilter : ActionFilterAttribute
     {
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            if (filterContext.ActionArguments.Any(arg => arg.Value == null))
-            {
-                filterContext.Result = new BadRequestError("Request body cannot be blank.");
-            }
-            else if (!filterContext.ModelState.IsValid)
+            if (!filterContext.ModelState.IsValid)
             {
                 var errors = filterContext.ModelState.Values
                     .SelectMany(v => v.Errors)

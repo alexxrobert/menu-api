@@ -2,9 +2,9 @@ using System;
 
 namespace Storefront.Menu.API.Models.EventModel
 {
-    public class IntegrationEvent<TPayload> : IEvent where TPayload : class
+    public class Event<TPayload> : IEvent where TPayload : class
     {
-        public IntegrationEvent()
+        public Event()
         {
             Id = Guid.NewGuid();
             CreatedAt = DateTime.UtcNow;

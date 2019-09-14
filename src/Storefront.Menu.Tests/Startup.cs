@@ -23,7 +23,8 @@ namespace Storefront.Menu.Tests
         {
             services.AddMvc(options =>
             {
-                options.Filters.Add(new RequestBodyValidationFilter());
+                options.Filters.Add(new EmptyRequestBodyValidationFilter());
+                options.Filters.Add(new JsonFormatValidationFilter());
             })
             .AddApplicationPart(typeof(Storefront.Menu.API.Startup).Assembly);
 
