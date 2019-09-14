@@ -71,6 +71,7 @@ namespace Storefront.Menu.API.Controllers
                 .WhereTitleContains(query.Title);
 
             var itemGroups = await itemGroupQuery
+                .OrderByTitle()
                 .Skip(query.Index.Value)
                 .Take(query.Length.Value)
                 .ToListAsync();
