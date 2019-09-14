@@ -16,6 +16,9 @@ namespace Storefront.Menu.API.Models.DataModel.OptionGroups
             })
             .HasName("pk_option_group");
 
+            optionGroup.HasIndex(p => p.Title)
+                .HasName("idx_option_group_title");
+
             optionGroup.Property(p => p.Id)
                 .HasColumnName("id")
                 .ValueGeneratedOnAdd();

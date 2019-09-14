@@ -43,6 +43,9 @@ namespace Storefront.Menu.API.Migrations
                     b.HasKey("TenantId", "Id")
                         .HasName("pk_item_group");
 
+                    b.HasIndex("Title")
+                        .HasName("idx_item_group_title");
+
                     b.ToTable("item_group");
                 });
 
@@ -81,6 +84,9 @@ namespace Storefront.Menu.API.Migrations
                     b.HasKey("TenantId", "Id")
                         .HasName("pk_item");
 
+                    b.HasIndex("Name")
+                        .HasName("idx_item_name");
+
                     b.HasIndex("TenantId", "ItemGroupId");
 
                     b.ToTable("item");
@@ -110,6 +116,9 @@ namespace Storefront.Menu.API.Migrations
 
                     b.HasKey("TenantId", "Id")
                         .HasName("pk_option_group");
+
+                    b.HasIndex("Title")
+                        .HasName("idx_option_group_title");
 
                     b.HasIndex("TenantId", "ItemGroupId");
 
@@ -144,6 +153,9 @@ namespace Storefront.Menu.API.Migrations
 
                     b.HasKey("TenantId", "Id")
                         .HasName("pk_option");
+
+                    b.HasIndex("Name")
+                        .HasName("idx_option_name");
 
                     b.HasIndex("TenantId", "OptionGroupId");
 
