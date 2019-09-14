@@ -8,6 +8,7 @@ using Storefront.Menu.API.Models.DataModel;
 using Storefront.Menu.API.Models.DataModel.ItemGroups;
 using Storefront.Menu.API.Models.IntegrationModel.EventBus;
 using Storefront.Menu.API.Models.ServiceModel;
+using Storefront.Menu.API.Models.TransferModel.Errors;
 using Storefront.Menu.API.Models.TransferModel.ItemGroups;
 
 namespace Storefront.Menu.API.Controllers
@@ -36,10 +37,10 @@ namespace Storefront.Menu.API.Controllers
         /// <param name="id">Item group ID.</param>
         /// <returns>Returns item group data.</returns>
         /// <response code="200">Item group data</response>
-        /// <response code="422">Error: ITEM_GROUP_NOT_FOUND</response>
+        /// <response code="422">Errors: ITEM_GROUP_NOT_FOUND</response>
         [HttpGet, Route("{id:long}")]
         [ProducesResponseType(statusCode: 200, type: typeof(ItemGroupJson))]
-        [ProducesResponseType(statusCode: 422, type: typeof(ItemGroupNotFoundError))]
+        [ProducesResponseType(statusCode: 422, type: typeof(UnprocessableEntityError))]
         public async Task<IActionResult> Find([FromRoute] long id)
         {
             var catalog = new ItemGroupCatalog(_dbContext, _eventBus);
@@ -108,10 +109,10 @@ namespace Storefront.Menu.API.Controllers
         /// <param name="json">Item group data.</param>
         /// <returns>Updated item group</returns>
         /// <response code="200">Item group data</response>
-        /// <response code="422">Error: ITEM_GROUP_NOT_FOUND</response>
+        /// <response code="422">Errors: ITEM_GROUP_NOT_FOUND</response>
         [HttpPut, Route("{id:long}")]
         [ProducesResponseType(statusCode: 200, type: typeof(ItemGroupJson))]
-        [ProducesResponseType(statusCode: 422, type: typeof(ItemGroupNotFoundError))]
+        [ProducesResponseType(statusCode: 422, type: typeof(UnprocessableEntityError))]
         public async Task<IActionResult> Update([FromRoute] long id, [FromBody] SaveItemGroupJson json)
         {
             var catalog = new ItemGroupCatalog(_dbContext, _eventBus);
@@ -137,10 +138,10 @@ namespace Storefront.Menu.API.Controllers
         /// <param name="id">Item group ID.</param>
         /// <returns>No content</returns>
         /// <response code="200">Item group data</response>
-        /// <response code="422">Error: ITEM_GROUP_NOT_FOUND</response>
+        /// <response code="422">Errors: ITEM_GROUP_NOT_FOUND</response>
         [HttpDelete, Route("{id:long}")]
-        [ProducesResponseType(statusCode: 200, type: typeof(ItemGroupJson))]
-        [ProducesResponseType(statusCode: 422, type: typeof(ItemGroupNotFoundError))]
+        [ProducesResponseType(statusCode: 204, type: typeof(ItemGroupJson))]
+        [ProducesResponseType(statusCode: 422, type: typeof(UnprocessableEntityError))]
         public async Task<IActionResult> Delete([FromRoute] long id)
         {
             var catalog = new ItemGroupCatalog(_dbContext, _eventBus);
