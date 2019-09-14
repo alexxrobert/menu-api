@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -18,7 +19,8 @@ namespace Storefront.Menu.API.Migrations
                 columns: table => new
                 {
                     id = table.Column<long>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     tenant_id = table.Column<long>(nullable: false),
                     title = table.Column<string>(maxLength: 50, nullable: false),
                     picture_file_id = table.Column<string>(maxLength: 50, nullable: true)
@@ -34,7 +36,8 @@ namespace Storefront.Menu.API.Migrations
                 columns: table => new
                 {
                     id = table.Column<long>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     tenant_id = table.Column<long>(nullable: false),
                     item_group_id = table.Column<long>(nullable: false),
                     name = table.Column<string>(maxLength: 50, nullable: false),
@@ -61,7 +64,8 @@ namespace Storefront.Menu.API.Migrations
                 columns: table => new
                 {
                     id = table.Column<long>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     tenant_id = table.Column<long>(nullable: false),
                     item_group_id = table.Column<long>(nullable: false),
                     title = table.Column<string>(maxLength: 50, nullable: true),
@@ -86,7 +90,8 @@ namespace Storefront.Menu.API.Migrations
                 columns: table => new
                 {
                     id = table.Column<long>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     tenant_id = table.Column<long>(nullable: false),
                     option_group_id = table.Column<long>(nullable: false),
                     name = table.Column<string>(maxLength: 50, nullable: false),
