@@ -6,6 +6,11 @@ namespace Storefront.Menu.API.Models.DataModel.ItemGroups
 {
     public static class ItemGroupQuery
     {
+        public static IQueryable<ItemGroup> OrderByTitle(this IQueryable<ItemGroup> itemGroups)
+        {
+            return itemGroups.OrderBy(itemGroup => itemGroup.Title);
+        }
+
         public static IQueryable<ItemGroup> WhereTenantId(this IQueryable<ItemGroup> itemGroups, long tenantId)
         {
             return itemGroups.Where(itemGroup => itemGroup.TenantId == tenantId);
