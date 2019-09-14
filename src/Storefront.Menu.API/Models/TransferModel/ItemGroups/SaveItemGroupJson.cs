@@ -6,7 +6,7 @@ namespace Storefront.Menu.API.Models.TransferModel.ItemGroups
     public sealed class SaveItemGroupJson
     {
         /// <summary>
-        /// Title of the item group
+        /// Title of the item group.
         /// </summary>
         /// <value></value>
         [Required, MaxLength(50)]
