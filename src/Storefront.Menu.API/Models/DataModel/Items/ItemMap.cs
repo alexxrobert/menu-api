@@ -16,6 +16,9 @@ namespace Storefront.Menu.API.Models.DataModel.Items
             })
             .HasName("pk_item");
 
+            item.HasIndex(p => p.Name)
+                .HasName("idx_item_name");
+
             item.Property(p => p.Id)
                 .HasColumnName("id")
                 .ValueGeneratedOnAdd();

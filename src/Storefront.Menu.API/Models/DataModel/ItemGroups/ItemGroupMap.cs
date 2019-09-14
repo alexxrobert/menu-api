@@ -5,34 +5,37 @@ namespace Storefront.Menu.API.Models.DataModel.ItemGroups
 {
     public static class ItemGroupMap
     {
-        public static void Configure(this EntityTypeBuilder<ItemGroup> ItemGroup)
+        public static void Configure(this EntityTypeBuilder<ItemGroup> itemGroup)
         {
-            ItemGroup.ToTable("item_group");
+            itemGroup.ToTable("item_group");
 
-            ItemGroup.HasKey(p => new
+            itemGroup.HasKey(p => new
             {
                 p.TenantId,
                 p.Id
             })
             .HasName("pk_item_group");
 
-            ItemGroup.Property(p => p.Id)
+            itemGroup.HasIndex(p => p.Title)
+                .HasName("idx_item_group_title");
+
+            itemGroup.Property(p => p.Id)
                 .HasColumnName("id")
                 .ValueGeneratedOnAdd();
 
-            ItemGroup.Property(p => p.TenantId)
+            itemGroup.Property(p => p.TenantId)
                 .HasColumnName("tenant_id");
 
-            ItemGroup.Property(p => p.Title)
+            itemGroup.Property(p => p.Title)
                 .HasColumnName("title")
                 .HasMaxLength(50)
                 .IsRequired();
 
-            ItemGroup.Property(p => p.PictureFileId)
+            itemGroup.Property(p => p.PictureFileId)
                 .HasColumnName("picture_file_id")
                 .HasMaxLength(50);
 
-            ItemGroup.HasMany(p => p.Items)
+            itemGroup.HasMany(p => p.Items)
                 .WithOne(p => p.ItemGroup)
                 .HasForeignKey(p => new
                 {
@@ -42,7 +45,7 @@ namespace Storefront.Menu.API.Models.DataModel.ItemGroups
                 .OnDelete(DeleteBehavior.Restrict)
                 .HasConstraintName("fk_item__item_group");
 
-            ItemGroup.HasMany(p => p.OptionGroups)
+            itemGroup.HasMany(p => p.OptionGroups)
                 .WithOne(p => p.ItemGroup)
                 .HasForeignKey(p => new{
                     p.TenantId,
