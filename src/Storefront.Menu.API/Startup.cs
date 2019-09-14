@@ -35,7 +35,8 @@ namespace Storefront.Menu.API
 
             services.AddMvc(options =>
             {
-                options.Filters.Add(new RequestBodyValidationFilter());
+                options.Filters.Add(new EmptyRequestBodyValidationFilter());
+                options.Filters.Add(new JsonFormatValidationFilter());
             });
 
             services.AddDefaultCorsPolicy();
