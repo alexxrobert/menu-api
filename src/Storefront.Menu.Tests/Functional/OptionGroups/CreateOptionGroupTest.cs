@@ -32,7 +32,7 @@ namespace Storefront.Menu.Tests.Functional.OptionGroups
             _server.Database.ItemGroups.Add(itemGroup);
             await _server.Database.SaveChangesAsync();
 
-            var path = $"/item-groups/{itemGroup.Id}/option-groups";
+            var path = "/option-groups";
             var jsonRequest = new SaveOptionGroupJson().Build();
             var response = await client.PostJsonAsync(path, jsonRequest);
             var jsonResponse = await client.ReadJsonAsync<OptionGroupJson>(response);
@@ -54,7 +54,7 @@ namespace Storefront.Menu.Tests.Functional.OptionGroups
             _server.Database.ItemGroups.Add(itemGroup);
             await _server.Database.SaveChangesAsync();
 
-            var path = $"/item-groups/{itemGroup.Id}/option-groups";
+            var path = "/option-groups";
             var jsonRequest = new SaveOptionGroupJson().Build();
             var response = await client.PostJsonAsync(path, jsonRequest);
             var optionGroup = await _server.Database.OptionGroups.SingleAsync();

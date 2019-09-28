@@ -33,7 +33,7 @@ namespace Storefront.Menu.Tests.Functional.OptionGroups
             _server.Database.OptionGroups.AddRange(optionGroup1, optionGroup2);
             await _server.Database.SaveChangesAsync();
 
-            var path = $"/item-groups/{itemGroup.Id}/option-groups";
+            var path = "/option-groups";
             var response = await client.GetAsync(path);
             var jsonResponse = await client.ReadJsonAsync<OptionGroupListJson>(response);
 
@@ -57,7 +57,7 @@ namespace Storefront.Menu.Tests.Functional.OptionGroups
             _server.Database.OptionGroups.AddRange(optionGroup1, optionGroup2);
             await _server.Database.SaveChangesAsync();
 
-            var path = $"/item-groups/{itemGroup.Id}/option-groups?title={optionGroup1.Title}";
+            var path = $"/option-groups?title={optionGroup1.Title}";
             var response = await client.GetAsync(path);
             var jsonResponse = await client.ReadJsonAsync<OptionGroupListJson>(response);
 
