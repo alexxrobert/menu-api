@@ -6,7 +6,7 @@ namespace Storefront.Menu.API.Models.EventModel.Published.OptionGroups
     {
         public OptionGroupDeletedEvent(OptionGroup optionGroup)
         {
-            Name = "menu.optiongroup.deleted";
+            Name = "menu.option-group.deleted";
             Payload = new OptionGroupPayload(optionGroup);
         }
     }

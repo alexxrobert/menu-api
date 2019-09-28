@@ -63,7 +63,7 @@ namespace Storefront.Menu.Tests.Functional.OptionGroups
             var path = $"/item-groups/{itemGroup.Id}/option-groups/{optionGroup.Id}";
             var response = await client.DeleteAsync(path);
             var publishedEvent = _server.EventBus.PublishedEvents
-                .Single(@event => @event.Name == "menu.optiongroup.deleted");
+                .Single(@event => @event.Name == "menu.option-group.deleted");
             var payload = (OptionGroupPayload)publishedEvent.Payload;
 
             Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);

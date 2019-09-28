@@ -7,7 +7,7 @@ namespace Storefront.Menu.API.Models.EventModel.Published.ItemGroups
     {
         public ItemGroupCreatedEvent(ItemGroup itemGroup)
         {
-            Name = "menu.itemgroup.created";
+            Name = "menu.item-group.created";
             Payload = new ItemGroupPayload(itemGroup);
         }
     }

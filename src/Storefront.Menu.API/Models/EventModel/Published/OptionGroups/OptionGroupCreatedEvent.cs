@@ -7,7 +7,7 @@ namespace Storefront.Menu.API.Models.EventModel.Published.OptionGroups
     {
         public OptionGroupCreatedEvent(OptionGroup optionGroup)
         {
-            Name = "menu.optiongroup.created";
+            Name = "menu.option-group.created";
             Payload = new OptionGroupPayload(optionGroup);
         }
     }

@@ -6,7 +6,7 @@ namespace Storefront.Menu.API.Models.EventModel.Published.ItemGroups
     {
         public ItemGroupUpdatedEvent(ItemGroup itemGroup)
         {
-            Name = "menu.itemgroup.updated";
+            Name = "menu.item-group.updated";
             Payload = new ItemGroupPayload(itemGroup);
         }
     }
