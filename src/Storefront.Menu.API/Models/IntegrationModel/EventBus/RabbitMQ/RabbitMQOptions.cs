@@ -4,5 +4,6 @@ namespace Storefront.Menu.API.Models.IntegrationModel.EventBus.RabbitMQ
     {
         public string Host { get; set; }
         public string Exchange { get; set; }
+        public string Queue { get; set; }
     }
 }

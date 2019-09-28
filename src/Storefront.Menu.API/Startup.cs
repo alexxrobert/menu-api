@@ -43,7 +43,11 @@ namespace Storefront.Menu.API
             services.AddJwtAuthentication(_configuration.GetSection("Auth"));
             services.AddSwaggerDocumentation();
 
-            services.AddScoped<IEventBus, RabbitMQEventBus>();
+            services.AddScoped<IMessageBroker, RabbitMQBroker>();
+
+            services.AddSingleton<EventBinding>();
+
+            services.AddHostedService<RabbitMQBroker>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

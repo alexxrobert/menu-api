@@ -12,7 +12,7 @@ namespace Storefront.Menu.Tests.Fakes
         public FakeApiServer() : base(new Program().CreateWebHostBuilder()) { }
 
         public ApiDbContext Database => Host.Services.GetService<ApiDbContext>();
-        public FakeEventBus EventBus => Host.Services.GetService<IEventBus>() as FakeEventBus;
+        public FakeMessageBroker EventBus => Host.Services.GetService<IMessageBroker>() as FakeMessageBroker;
         public JwtOptions JwtOptions => Host.Services.GetService<IOptions<JwtOptions>>().Value;
     }
 }

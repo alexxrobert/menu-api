@@ -10,12 +10,12 @@ namespace Storefront.Menu.API.Models.ServiceModel
     public sealed class ItemCatalog
     {
         private readonly ApiDbContext _dbContext;
-        private readonly IEventBus _eventBus;
+        private readonly IMessageBroker _messageBroker;
 
-        public ItemCatalog(ApiDbContext dbContext, IEventBus eventBus)
+        public ItemCatalog(ApiDbContext dbContext, IMessageBroker messageBroker)
         {
             _dbContext = dbContext;
-            _eventBus = eventBus;
+            _messageBroker = messageBroker;
         }
 
         public Item Item { get; private set; }
@@ -34,7 +34,7 @@ namespace Storefront.Menu.API.Models.ServiceModel
 
             await _dbContext.SaveChangesAsync();
 
-            _eventBus.Publish(new ItemCreatedEvent(Item));
+            _messageBroker.Publish(new ItemCreatedEvent(Item));
         }
 
         public async Task Find(long tenantId, long itemId)
@@ -54,7 +54,7 @@ namespace Storefront.Menu.API.Models.ServiceModel
 
             await _dbContext.SaveChangesAsync();
 
-            _eventBus.Publish(new ItemUpdatedEvent(Item));
+            _messageBroker.Publish(new ItemUpdatedEvent(Item));
         }
 
         public async Task Delete()
@@ -63,12 +63,12 @@ namespace Storefront.Menu.API.Models.ServiceModel
 
             await _dbContext.SaveChangesAsync();
 
-            _eventBus.Publish(new ItemDeletedEvent(Item));
+            _messageBroker.Publish(new ItemDeletedEvent(Item));
         }
 
         private async Task CheckIfGroupExists()
         {
-            var itemGroupCatalog = new ItemGroupCatalog(_dbContext, _eventBus);
+            var itemGroupCatalog = new ItemGroupCatalog(_dbContext, _messageBroker);
 
             await itemGroupCatalog.Find(Item.TenantId, Item.ItemGroupId);
 
