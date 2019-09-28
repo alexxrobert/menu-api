@@ -64,7 +64,7 @@ namespace Storefront.Menu.Tests.Functional.OptionGroups
             var jsonRequest = new SaveOptionGroupJson().Build();
             var response = await client.PutJsonAsync(path, jsonRequest);
             var publishedEvent = _server.EventBus.PublishedEvents
-                .Single(@event => @event.Name == "menu.optiongroup.updated");
+                .Single(@event => @event.Name == "menu.option-group.updated");
             var payload = (OptionGroupPayload)publishedEvent.Payload;
 
             await _server.Database.Entry(optionGroup).ReloadAsync();

@@ -58,7 +58,7 @@ namespace Storefront.Menu.Tests.Functional.ItemGroups
             var jsonRequest = new SaveItemGroupJson().Build();
             var response = await client.PutJsonAsync(path, jsonRequest);
             var publishedEvent = _server.EventBus.PublishedEvents
-                .Single(@event => @event.Name == "menu.itemgroup.updated");
+                .Single(@event => @event.Name == "menu.item-group.updated");
             var payload = (ItemGroupPayload)publishedEvent.Payload;
 
             await _server.Database.Entry(itemGroup).ReloadAsync();

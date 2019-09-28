@@ -57,7 +57,7 @@ namespace Storefront.Menu.Tests.Functional.ItemGroups
             var path = $"/item-groups/{itemGroup.Id}";
             var response = await client.DeleteAsync(path);
             var publishedEvent = _server.EventBus.PublishedEvents
-                .Single(@event => @event.Name == "menu.itemgroup.deleted");
+                .Single(@event => @event.Name == "menu.item-group.deleted");
             var payload = (ItemGroupPayload)publishedEvent.Payload;
 
             Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);

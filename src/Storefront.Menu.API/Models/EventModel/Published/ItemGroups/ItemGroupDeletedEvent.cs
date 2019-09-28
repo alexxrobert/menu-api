@@ -6,7 +6,7 @@ namespace Storefront.Menu.API.Models.EventModel.Published.ItemGroups
     {
         public ItemGroupDeletedEvent(ItemGroup itemGroup)
         {
-            Name = "menu.itemgroup.deleted";
+            Name = "menu.item-group.deleted";
             Payload = new ItemGroupPayload(itemGroup);
         }
     }

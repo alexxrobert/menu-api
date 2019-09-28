@@ -6,7 +6,7 @@ namespace Storefront.Menu.API.Models.EventModel.Published.OptionGroups
     {
         public OptionGroupUpdatedEvent(OptionGroup optionGroup)
         {
-            Name = "menu.optiongroup.updated";
+            Name = "menu.option-group.updated";
             Payload = new OptionGroupPayload(optionGroup);
         }
     }

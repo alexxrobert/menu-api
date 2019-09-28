@@ -47,7 +47,7 @@ namespace Storefront.Menu.Tests.Functional.ItemGroups
             var response = await client.PostJsonAsync(path, jsonRequest);
             var itemGroup = await _server.Database.ItemGroups.SingleAsync();
             var publishedEvent = _server.EventBus.PublishedEvents
-                .Single(@event => @event.Name == "menu.itemgroup.created");
+                .Single(@event => @event.Name == "menu.item-group.created");
             var payload = (ItemGroupPayload)publishedEvent.Payload;
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);

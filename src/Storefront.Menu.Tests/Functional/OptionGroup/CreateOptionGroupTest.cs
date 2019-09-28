@@ -59,7 +59,7 @@ namespace Storefront.Menu.Tests.Functional.OptionGroups
             var response = await client.PostJsonAsync(path, jsonRequest);
             var optionGroup = await _server.Database.OptionGroups.SingleAsync();
             var publishedEvent = _server.EventBus.PublishedEvents
-                .Single(@event => @event.Name == "menu.optiongroup.created");
+                .Single(@event => @event.Name == "menu.option-group.created");
             var payload = (OptionGroupPayload)publishedEvent.Payload;
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
