@@ -1,6 +1,6 @@
 # Menu API
 
-A list of dishes available in a restaurant. Including items, categories and pictures.
+Configure items in the restaurant menu that can be customized by the customer to create the order.
 
 ## Status
 
@@ -9,36 +9,8 @@ A list of dishes available in a restaurant. Including items, categories and pict
 
 ## Documentation
 
-API documentation written with Swagger and available at the root URL (no route prefix).
-
-## Debug locally
-
-Before you start:
-
-- Install [.NET Core SDK](https://dotnet.microsoft.com/)
-- Install [PostgreSQL](https://www.postgresql.org/) or
-  [SQL Server](https://www.microsoft.com/en-us/sql-server/sql-server-downloads/)
-- Install [VS Code](https://code.visualstudio.com/) (or your preferred editor)
-
-To create/drop a PotgreSQL database on Linux:
-
-```bash
-# Create database:
-bash .sh/db/postgresql/create.sh /path/to/file.conf
-
-# Drop database:
-bash .sh/db/postgresql/drop.sh /path/to/file.conf
-```
-
-```bash
-#file.conf
-
-PGHOST=""
-PGPORT=""
-PGUSER=""
-PGPASSWORD=""
-DBNAME=""
-```
+For documentation, including overview, Docker image and debug locally, please refer to the
+[Wiki pages](https://github.com/storefront-community/menu-api/wiki).
 
 ## Bugs and features
 
