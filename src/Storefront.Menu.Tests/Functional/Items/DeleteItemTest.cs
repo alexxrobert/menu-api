@@ -36,7 +36,7 @@ namespace Storefront.Menu.Tests.Functional.Items
 
             await _server.Database.SaveChangesAsync();
 
-            var path = $"/items/{item.Id}";
+            var path = $"/item-groups/{itemGroup.Id}/items/{item.Id}";
             var response = await client.DeleteAsync(path);
             var hasBeenDeleted = !await _server.Database.Items
                 .WhereKey(token.TenantId, item.Id)
@@ -60,7 +60,7 @@ namespace Storefront.Menu.Tests.Functional.Items
 
             await _server.Database.SaveChangesAsync();
 
-            var path = $"/items/{item.Id}";
+            var path = $"/item-groups/{itemGroup.Id}/items/{item.Id}";
             var response = await client.DeleteAsync(path);
             var publishedEvent = _server.EventBus.PublishedEvents
                 .Single(@event => @event.Name == "menu.item.deleted");
@@ -81,7 +81,12 @@ namespace Storefront.Menu.Tests.Functional.Items
             var token = new FakeApiToken(_server.JwtOptions);
             var client = new FakeApiClient(_server, token);
 
-            var path = "/items/5";
+            var itemGroup = new ItemGroup().Of(token.TenantId);
+
+            _server.Database.ItemGroups.Add(itemGroup);
+            await _server.Database.SaveChangesAsync();
+
+            var path = $"/item-groups/{itemGroup.Id}/items/5";
             var response = await client.DeleteAsync(path);
             var jsonResponse = await client.ReadJsonAsync<UnprocessableEntityError>(response);
 

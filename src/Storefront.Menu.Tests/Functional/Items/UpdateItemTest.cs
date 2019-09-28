@@ -37,7 +37,7 @@ namespace Storefront.Menu.Tests.Functional.Items
 
             await _server.Database.SaveChangesAsync();
 
-            var path = $"/items/{item.Id}";
+            var path = $"/item-groups/{itemGroup1.Id}/items/{item.Id}";
             var jsonRequest = new SaveItemJson().Build(groupId: itemGroup2.Id);
             var response = await client.PutJsonAsync(path, jsonRequest);
             var jsonResponse = await client.ReadJsonAsync<ItemJson>(response);
@@ -73,7 +73,7 @@ namespace Storefront.Menu.Tests.Functional.Items
 
             await _server.Database.SaveChangesAsync();
 
-            var path = $"/items/{item.Id}";
+            var path = $"/item-groups/{itemGroup.Id}/items/{item.Id}";
             var jsonRequest = new SaveItemJson().Build(groupId: itemGroup.Id);
             var response = await client.PutJsonAsync(path, jsonRequest);
             var publishedEvent = _server.EventBus.PublishedEvents
@@ -103,7 +103,7 @@ namespace Storefront.Menu.Tests.Functional.Items
 
             await _server.Database.SaveChangesAsync();
 
-            var path = "/items/5";
+            var path = $"/item-groups/{itemGroup.Id}/items/5";
             var jsonRequest = new SaveItemJson().Build(groupId: itemGroup.Id);
             var response = await client.PutJsonAsync(path, jsonRequest);
             var jsonResponse = await client.ReadJsonAsync<UnprocessableEntityError>(response);
@@ -126,7 +126,7 @@ namespace Storefront.Menu.Tests.Functional.Items
 
             await _server.Database.SaveChangesAsync();
 
-            var path = $"/items/{item.Id}";
+            var path = $"/item-groups/{itemGroup.Id}/items/{item.Id}";
             var jsonRequest = new SaveItemJson().Build(groupId: 80);
             var response = await client.PutJsonAsync(path, jsonRequest);
             var jsonResponse = await client.ReadJsonAsync<UnprocessableEntityError>(response);
