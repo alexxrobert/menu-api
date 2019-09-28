@@ -33,7 +33,7 @@ namespace Storefront.Menu.Tests.Functional.OptionGroups
             _server.Database.OptionGroups.Add(optionGroup);
             await _server.Database.SaveChangesAsync();
 
-            var path = $"/item-groups/{itemGroup.Id}/option-groups/{optionGroup.Id}";
+            var path = $"/option-groups/{optionGroup.Id}";
             var response = await client.GetAsync(path);
             var jsonResponse = await client.ReadJsonAsync<OptionGroupJson>(response);
 
@@ -53,7 +53,7 @@ namespace Storefront.Menu.Tests.Functional.OptionGroups
             _server.Database.ItemGroups.Add(itemGroup);
             await _server.Database.SaveChangesAsync();
 
-            var path = $"/item-groups/{itemGroup.Id}/option-groups/5";
+            var path = "/option-groups/5";
             var jsonRequest = new SaveOptionGroupJson().Build();
             var response = await client.GetAsync(path);
             var jsonResponse = await client.ReadJsonAsync<UnprocessableEntityError>(response);

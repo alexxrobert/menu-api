@@ -37,11 +37,10 @@ namespace Storefront.Menu.API.Models.ServiceModel
             _messageBroker.Publish(new ItemCreatedEvent(Item));
         }
 
-        public async Task Find(long tenantId, long itemGroupId, long itemId)
+        public async Task Find(long tenantId, long itemId)
         {
             Item = await _dbContext.Items
                 .WhereKey(tenantId, itemId)
-                .WhereItemGroupId(itemGroupId)
                 .SingleOrDefaultAsync();
 
             ItemNotExists = Item == null;

@@ -22,12 +22,6 @@ namespace Storefront.Menu.API.Models.DataModel.OptionGroups
             return optionGroups.WhereTenantId(tenantId).Where(optionGroup => optionGroup.Id == id);
         }
 
-        public static IQueryable<OptionGroup> WhereItemGroupId(this IQueryable<OptionGroup> optionGroups,
-            long itemGroupId)
-        {
-            return optionGroups.Where(optionGroup => optionGroup.ItemGroupId == itemGroupId);
-        }
-
         public static IQueryable<OptionGroup> WhereTitleContains(this IQueryable<OptionGroup> optionGroups,
             string title)
         {

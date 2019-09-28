@@ -17,7 +17,7 @@ namespace Storefront.Menu.API.Controllers
     /// <summary>
     /// Items that belongs to an item group.
     /// </summary>
-    [Route("item-groups/{itemGroupId:long}/items"), Authorize]
+    [Route("items"), Authorize]
     [ApiExplorerSettings(GroupName = "Items")]
     [Consumes("application/json")]
     [Produces("application/json")]
@@ -35,7 +35,6 @@ namespace Storefront.Menu.API.Controllers
         /// <summary>
         /// Find an item by ID.
         /// </summary>
-        /// <param name="itemGroupId">Item group ID.</param>
         /// <param name="id">Item ID.</param>
         /// <returns>Returns item data.</returns>
         /// <response code="200">Item data</response>
@@ -43,12 +42,12 @@ namespace Storefront.Menu.API.Controllers
         [HttpGet, Route("{id:long}")]
         [ProducesResponseType(statusCode: 200, type: typeof(ItemJson))]
         [ProducesResponseType(statusCode: 422, type: typeof(UnprocessableEntityError))]
-        public async Task<IActionResult> Find([FromRoute] long itemGroupId, [FromRoute] long id)
+        public async Task<IActionResult> Find([FromRoute] long id)
         {
             var catalog = new ItemCatalog(_dbContext, _messageBroker);
             var tenantId = User.Claims.TenantId();
 
-            await catalog.Find(tenantId, itemGroupId, id);
+            await catalog.Find(tenantId, id);
 
             if (catalog.ItemNotExists)
             {
@@ -61,13 +60,12 @@ namespace Storefront.Menu.API.Controllers
         /// <summary>
         /// List items ordered by name. Search by: name, availability.
         /// </summary>
-        /// <param name="itemGroupId">Item group ID.</param>
         /// <param name="query">URL query sring parameters.</param>
         /// <returns>List of items</returns>
         /// <response code="200">Search result</response>
         [HttpGet, Route("")]
         [ProducesResponseType(statusCode: 200, type: typeof(ItemListJson))]
-        public async Task<IActionResult> List([FromRoute] long itemGroupId, [FromQuery] ItemListQuery query)
+        public async Task<IActionResult> List([FromQuery] ItemListQuery query)
         {
             var itemQuery = _dbContext.Items
                 .WhereTenantId(User.Claims.TenantId())
@@ -88,13 +86,12 @@ namespace Storefront.Menu.API.Controllers
         /// <summary>
         /// Create an item.
         /// </summary>
-        /// <param name="itemGroupId">Item group ID.</param>
         /// <param name="json">Item data.</param>
         /// <returns>Created item.</returns>
         /// <response code="200">Item data</response>
         [HttpPost, Route("")]
         [ProducesResponseType(statusCode: 200, type: typeof(ItemListJson))]
-        public async Task<IActionResult> Create([FromRoute] long itemGroupId, [FromBody] SaveItemJson json)
+        public async Task<IActionResult> Create([FromBody] SaveItemJson json)
         {
             var catalog = new ItemCatalog(_dbContext, _messageBroker);
 
@@ -116,7 +113,6 @@ namespace Storefront.Menu.API.Controllers
         /// <summary>
         /// Update an item.
         /// </summary>
-        /// <param name="itemGroupId">Item group ID.</param>
         /// <param name="id">Item ID.</param>
         /// <param name="json">Item data.</param>
         /// <returns>Updated item</returns>
@@ -125,13 +121,13 @@ namespace Storefront.Menu.API.Controllers
         [HttpPut, Route("{id:long}")]
         [ProducesResponseType(statusCode: 200, type: typeof(ItemJson))]
         [ProducesResponseType(statusCode: 422, type: typeof(UnprocessableEntityError))]
-        public async Task<IActionResult> Update([FromRoute] long itemGroupId, [FromRoute] long id,
+        public async Task<IActionResult> Update([FromRoute] long id,
             [FromBody] SaveItemJson json)
         {
             var catalog = new ItemCatalog(_dbContext, _messageBroker);
             var tenantId = User.Claims.TenantId();
 
-            await catalog.Find(tenantId, itemGroupId, id);
+            await catalog.Find(tenantId, id);
 
             if (catalog.ItemNotExists)
             {
@@ -153,7 +149,6 @@ namespace Storefront.Menu.API.Controllers
         /// <summary>
         /// Delete an item.
         /// </summary>
-        /// <param name="itemGroupId">Item group ID.</param>
         /// <param name="id">Item ID.</param>
         /// <returns>No content</returns>
         /// <response code="200">Item data</response>
@@ -161,12 +156,12 @@ namespace Storefront.Menu.API.Controllers
         [HttpDelete, Route("{id:long}")]
         [ProducesResponseType(statusCode: 204)]
         [ProducesResponseType(statusCode: 422, type: typeof(UnprocessableEntityError))]
-        public async Task<IActionResult> Delete([FromRoute] long itemGroupId, [FromRoute] long id)
+        public async Task<IActionResult> Delete([FromRoute] long id)
         {
             var catalog = new ItemCatalog(_dbContext, _messageBroker);
             var tenantId = User.Claims.TenantId();
 
-            await catalog.Find(tenantId, itemGroupId, id);
+            await catalog.Find(tenantId, id);
 
             if (catalog.ItemNotExists)
             {

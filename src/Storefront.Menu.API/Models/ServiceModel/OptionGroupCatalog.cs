@@ -34,11 +34,10 @@ namespace Storefront.Menu.API.Models.ServiceModel
             _messageBroker.Publish(new OptionGroupCreatedEvent(OptionGroup));
         }
 
-        public async Task Find(long tenantId, long itemGroupId, long optionGroupId)
+        public async Task Find(long tenantId, long optionGroupId)
         {
             OptionGroup = await _dbContext.OptionGroups
                 .WhereKey(tenantId, optionGroupId)
-                .WhereItemGroupId(itemGroupId)
                 .SingleOrDefaultAsync();
 
             GroupNotExists = OptionGroup == null;

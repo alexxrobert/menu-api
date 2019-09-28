@@ -17,7 +17,7 @@ namespace Storefront.Menu.API.Controllers
     /// Group of options allowed for the user to choose
     /// </summary>
     [ApiExplorerSettings(GroupName = "Option groups")]
-    [Route("item-groups/{itemGroupId:long}/option-groups"), Authorize]
+    [Route("option-groups"), Authorize]
     [Consumes("application/json")]
     [Produces("application/json")]
     public sealed class OptionGroupsController : Controller
@@ -34,7 +34,6 @@ namespace Storefront.Menu.API.Controllers
         /// <summary>
         /// Find an option group by ID.
         /// </summary>
-        /// <param name="itemGroupId">Item group ID.</param>
         /// <param name="id">Option group ID.</param>
         /// <returns>Returns option group data.</returns>
         /// <response code="200">Option group data</response>
@@ -42,12 +41,12 @@ namespace Storefront.Menu.API.Controllers
         [HttpGet, Route("{id:long}")]
         [ProducesResponseType(statusCode: 200, type: typeof(OptionGroupJson))]
         [ProducesResponseType(statusCode: 422, type: typeof(UnprocessableEntityError))]
-        public async Task<IActionResult> Find([FromRoute] long itemGroupId, [FromRoute] long id)
+        public async Task<IActionResult> Find([FromRoute] long id)
         {
             var catalog = new OptionGroupCatalog(_dbContext, _messageBroker);
             var tenantId = User.Claims.TenantId();
 
-            await catalog.Find(tenantId, itemGroupId, id);
+            await catalog.Find(tenantId, id);
 
             if (catalog.GroupNotExists)
             {
@@ -60,13 +59,12 @@ namespace Storefront.Menu.API.Controllers
         /// <summary>
         /// List option groups ordered by title. Search by: title.
         /// </summary>
-        /// <param name="itemGroupId">Item group ID.</param>
         /// <param name="query">URL query sring parameters.</param>
         /// <returns>List of option groups</returns>
         /// <response code="200">Search result</response>
         [HttpGet, Route("")]
         [ProducesResponseType(statusCode: 200, type: typeof(OptionGroupListJson))]
-        public async Task<IActionResult> List([FromRoute] long itemGroupId, [FromQuery] OptionGroupListQuery query)
+        public async Task<IActionResult> List([FromQuery] OptionGroupListQuery query)
         {
             var optionGroupQuery = _dbContext.OptionGroups
                 .WhereTenantId(User.Claims.TenantId())
@@ -86,13 +84,12 @@ namespace Storefront.Menu.API.Controllers
         /// <summary>
         /// Create an option group.
         /// </summary>
-        /// <param name="itemGroupId">Item group ID.</param>
         /// <param name="json">Option group data.</param>
         /// <returns>Created option group.</returns>
         /// <response code="200">Option group data</response>
         [HttpPost, Route("")]
         [ProducesResponseType(statusCode: 200, type: typeof(OptionGroupListJson))]
-        public async Task<IActionResult> Create([FromRoute] long itemGroupId, [FromBody] SaveOptionGroupJson json)
+        public async Task<IActionResult> Create([FromBody] SaveOptionGroupJson json)
         {
             var catalog = new OptionGroupCatalog(_dbContext, _messageBroker);
 
@@ -109,7 +106,6 @@ namespace Storefront.Menu.API.Controllers
         /// <summary>
         /// Update an option group.
         /// </summary>
-        /// <param name="itemGroupId">Item group ID.</param>
         /// <param name="id">Option group ID.</param>
         /// <param name="json">Option group data.</param>
         /// <returns>Updated option group</returns>
@@ -118,13 +114,12 @@ namespace Storefront.Menu.API.Controllers
         [HttpPut, Route("{id:long}")]
         [ProducesResponseType(statusCode: 200, type: typeof(OptionGroupJson))]
         [ProducesResponseType(statusCode: 422, type: typeof(UnprocessableEntityError))]
-        public async Task<IActionResult> Update([FromRoute] long itemGroupId, [FromRoute] long id,
-            [FromBody] SaveOptionGroupJson json)
+        public async Task<IActionResult> Update([FromRoute] long id, [FromBody] SaveOptionGroupJson json)
         {
             var catalog = new OptionGroupCatalog(_dbContext, _messageBroker);
             var tenantId = User.Claims.TenantId();
 
-            await catalog.Find(tenantId, itemGroupId, id);
+            await catalog.Find(tenantId, id);
 
             if (catalog.GroupNotExists)
             {
@@ -141,7 +136,6 @@ namespace Storefront.Menu.API.Controllers
         /// <summary>
         /// Delete an option group.
         /// </summary>
-        /// <param name="itemGroupId">Item group ID.</param>
         /// <param name="id">Option group ID.</param>
         /// <returns>No content</returns>
         /// <response code="200">Option group data</response>
@@ -149,12 +143,12 @@ namespace Storefront.Menu.API.Controllers
         [HttpDelete, Route("{id:long}")]
         [ProducesResponseType(statusCode: 204, type: typeof(OptionGroupJson))]
         [ProducesResponseType(statusCode: 422, type: typeof(UnprocessableEntityError))]
-        public async Task<IActionResult> Delete([FromRoute] long itemGroupId, [FromRoute] long id)
+        public async Task<IActionResult> Delete([FromRoute] long id)
         {
             var catalog = new OptionGroupCatalog(_dbContext, _messageBroker);
             var tenantId = User.Claims.TenantId();
 
-            await catalog.Find(tenantId, itemGroupId, id);
+            await catalog.Find(tenantId, id);
 
             if (catalog.GroupNotExists)
             {
