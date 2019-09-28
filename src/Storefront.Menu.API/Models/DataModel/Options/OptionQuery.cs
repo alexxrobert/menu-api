@@ -16,7 +16,7 @@ namespace Storefront.Menu.API.Models.DataModel.Options
             return options.Where(option => option.TenantId == tenantId);
         }
 
-        public static IQueryable<Option> WhereId(this IQueryable<Option> options, long tenantId, long optionId)
+        public static IQueryable<Option> WhereKey(this IQueryable<Option> options, long tenantId, long optionId)
         {
             return options.Where(option => option.Id == optionId);
         }
