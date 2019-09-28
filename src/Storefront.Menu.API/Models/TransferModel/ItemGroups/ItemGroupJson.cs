@@ -12,12 +12,10 @@ namespace Storefront.Menu.API.Models.TransferModel.ItemGroups
         {
             Id = itemGroup.Id;
             Title = itemGroup.Title;
-            ImageUrl = "";
         }
 
         public long Id { get; set; }
         public string Title { get; set; }
-        public string ImageUrl { get; set; }
 
         public async Task ExecuteResultAsync(ActionContext context)
         {
