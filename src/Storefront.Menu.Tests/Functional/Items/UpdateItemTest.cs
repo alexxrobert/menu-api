@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Storefront.Menu.API.Models.DataModel.ItemGroups;
 using Storefront.Menu.API.Models.DataModel.Items;
 using Storefront.Menu.API.Models.EventModel.Published.Items;
-using Storefront.Menu.API.Models.TransferModel.Errors;
+using Storefront.Menu.API.Models.TransferModel;
 using Storefront.Menu.API.Models.TransferModel.Items;
 using Storefront.Menu.Tests.Factories.ItemGroups;
 using Storefront.Menu.Tests.Factories.Items;

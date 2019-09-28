@@ -8,7 +8,7 @@ using Storefront.Menu.API.Models.DataModel;
 using Storefront.Menu.API.Models.DataModel.Items;
 using Storefront.Menu.API.Models.IntegrationModel.EventBus;
 using Storefront.Menu.API.Models.ServiceModel;
-using Storefront.Menu.API.Models.TransferModel.Errors;
+using Storefront.Menu.API.Models.TransferModel;
 using Storefront.Menu.API.Models.TransferModel.ItemGroups;
 using Storefront.Menu.API.Models.TransferModel.Items;
 

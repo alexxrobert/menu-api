@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Storefront.Menu.API.Models.DataModel.ItemGroups;
 using Storefront.Menu.API.Models.DataModel.OptionGroups;
 using Storefront.Menu.API.Models.EventModel.Published.OptionGroups;
-using Storefront.Menu.API.Models.TransferModel.Errors;
+using Storefront.Menu.API.Models.TransferModel;
 using Storefront.Menu.API.Models.TransferModel.OptionGroups;
 using Storefront.Menu.Tests.Factories.ItemGroups;
 using Storefront.Menu.Tests.Factories.OptionGroups;
