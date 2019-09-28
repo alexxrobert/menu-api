@@ -15,48 +15,46 @@ namespace Storefront.Menu.Tests.Functional.OptionGroups
     public sealed class CreateOptionGroupTest
     {
         private readonly FakeApiServer _server;
+        private readonly FakeApiToken _token;
+        private readonly FakeApiClient _client;
 
         public CreateOptionGroupTest()
         {
             _server = new FakeApiServer();
+            _token = new FakeApiToken(_server.JwtOptions);
+            _client = new FakeApiClient(_server, _token);
         }
 
         [Fact]
         public async Task ShouldCreateSuccessfully()
         {
-            var token = new FakeApiToken(_server.JwtOptions);
-            var client = new FakeApiClient(_server, token);
-
-            var itemGroup = new ItemGroup().Of(token.TenantId);
+            var itemGroup = new ItemGroup().Of(_token.TenantId);
 
             _server.Database.ItemGroups.Add(itemGroup);
             await _server.Database.SaveChangesAsync();
 
             var path = "/option-groups";
             var jsonRequest = new SaveOptionGroupJson().Build();
-            var response = await client.PostJsonAsync(path, jsonRequest);
-            var jsonResponse = await client.ReadJsonAsync<OptionGroupJson>(response);
+            var response = await _client.PostJsonAsync(path, jsonRequest);
+            var jsonResponse = await _client.ReadJsonAsync<OptionGroupJson>(response);
             var optionGroup = await _server.Database.OptionGroups.SingleAsync();
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            Assert.Equal(token.TenantId, optionGroup.TenantId);
+            Assert.Equal(_token.TenantId, optionGroup.TenantId);
             Assert.Equal(jsonRequest.Title, optionGroup.Title);
         }
 
         [Fact]
         public async Task ShouldPublishEventAfterCreateSuccessfully()
         {
-            var token = new FakeApiToken(_server.JwtOptions);
-            var client = new FakeApiClient(_server, token);
-
-            var itemGroup = new ItemGroup().Of(token.TenantId);
+            var itemGroup = new ItemGroup().Of(_token.TenantId);
 
             _server.Database.ItemGroups.Add(itemGroup);
             await _server.Database.SaveChangesAsync();
 
             var path = "/option-groups";
             var jsonRequest = new SaveOptionGroupJson().Build();
-            var response = await client.PostJsonAsync(path, jsonRequest);
+            var response = await _client.PostJsonAsync(path, jsonRequest);
             var optionGroup = await _server.Database.OptionGroups.SingleAsync();
             var publishedEvent = _server.EventBus.PublishedEvents
                 .Single(@event => @event.Name == "menu.option-group.created");

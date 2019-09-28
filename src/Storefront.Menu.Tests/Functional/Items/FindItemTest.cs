@@ -14,19 +14,20 @@ namespace Storefront.Menu.Tests.Functional.Items
     public sealed class FindItemTest
     {
         private readonly FakeApiServer _server;
+        private readonly FakeApiToken _token;
+        private readonly FakeApiClient _client;
 
         public FindItemTest()
         {
             _server = new FakeApiServer();
+            _token = new FakeApiToken(_server.JwtOptions);
+            _client = new FakeApiClient(_server, _token);
         }
 
         [Fact]
         public async Task ShouldFindSuccessfully()
         {
-            var token = new FakeApiToken(_server.JwtOptions);
-            var client = new FakeApiClient(_server, token);
-
-            var itemGroup = new ItemGroup().Of(token.TenantId);
+            var itemGroup = new ItemGroup().Of(_token.TenantId);
             var item = new Item().To(itemGroup);
 
             _server.Database.ItemGroups.Add(itemGroup);
@@ -35,8 +36,8 @@ namespace Storefront.Menu.Tests.Functional.Items
             await _server.Database.SaveChangesAsync();
 
             var path = $"/items/{item.Id}";
-            var response = await client.GetAsync(path);
-            var jsonResponse = await client.ReadJsonAsync<ItemJson>(response);
+            var response = await _client.GetAsync(path);
+            var jsonResponse = await _client.ReadJsonAsync<ItemJson>(response);
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             Assert.Equal(item.Id, jsonResponse.Id);
@@ -49,17 +50,14 @@ namespace Storefront.Menu.Tests.Functional.Items
         [Fact]
         public async Task ShouldRespond422ForInexistentId()
         {
-            var token = new FakeApiToken(_server.JwtOptions);
-            var client = new FakeApiClient(_server, token);
-
-            var itemGroup = new ItemGroup().Of(token.TenantId);
+            var itemGroup = new ItemGroup().Of(_token.TenantId);
 
             _server.Database.ItemGroups.Add(itemGroup);
             await _server.Database.SaveChangesAsync();
 
             var path = "/items/5";
-            var response = await client.GetAsync(path);
-            var jsonResponse = await client.ReadJsonAsync<UnprocessableEntityError>(response);
+            var response = await _client.GetAsync(path);
+            var jsonResponse = await _client.ReadJsonAsync<UnprocessableEntityError>(response);
 
             Assert.Equal(HttpStatusCode.UnprocessableEntity, response.StatusCode);
             Assert.Equal("ITEM_NOT_FOUND", jsonResponse.Error);

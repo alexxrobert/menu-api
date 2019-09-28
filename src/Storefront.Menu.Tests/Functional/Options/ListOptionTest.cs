@@ -15,19 +15,20 @@ namespace Storefront.Menu.Tests.Functional.Options
     public sealed class ListOptionTest
     {
         private readonly FakeApiServer _server;
+        private readonly FakeApiToken _token;
+        private readonly FakeApiClient _client;
 
         public ListOptionTest()
         {
             _server = new FakeApiServer();
+            _token = new FakeApiToken(_server.JwtOptions);
+            _client = new FakeApiClient(_server, _token);
         }
 
         [Fact]
         public async Task ShouldListAll()
         {
-            var token = new FakeApiToken(_server.JwtOptions);
-            var client = new FakeApiClient(_server, token);
-
-            var itemGroup = new ItemGroup().Of(token.TenantId);
+            var itemGroup = new ItemGroup().Of(_token.TenantId);
             var optionGroup = new OptionGroup().To(itemGroup);
             var option = new Option().To(optionGroup);
 
@@ -41,8 +42,8 @@ namespace Storefront.Menu.Tests.Functional.Options
             await _server.Database.SaveChangesAsync();
 
             var path = "/options";
-            var response = await client.GetAsync(path);
-            var jsonResponse = await client.ReadJsonAsync<OptionListJson>(response);
+            var response = await _client.GetAsync(path);
+            var jsonResponse = await _client.ReadJsonAsync<OptionListJson>(response);
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             Assert.Equal(2, jsonResponse.Count);
@@ -53,10 +54,7 @@ namespace Storefront.Menu.Tests.Functional.Options
         [Fact]
         public async Task ShouldListByName()
         {
-            var token = new FakeApiToken(_server.JwtOptions);
-            var client = new FakeApiClient(_server, token);
-
-            var itemGroup = new ItemGroup().Of(token.TenantId);
+            var itemGroup = new ItemGroup().Of(_token.TenantId);
             var optionGroup = new OptionGroup().To(itemGroup);
             var option = new Option().To(optionGroup);
 
@@ -70,8 +68,8 @@ namespace Storefront.Menu.Tests.Functional.Options
             await _server.Database.SaveChangesAsync();
 
             var path = $"/options?name={option1.Name}";
-            var response = await client.GetAsync(path);
-            var jsonResponse = await client.ReadJsonAsync<OptionListJson>(response);
+            var response = await _client.GetAsync(path);
+            var jsonResponse = await _client.ReadJsonAsync<OptionListJson>(response);
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             Assert.Equal(1, jsonResponse.Count);
@@ -82,10 +80,7 @@ namespace Storefront.Menu.Tests.Functional.Options
         [Fact]
         public async Task ShouldListAvailable()
         {
-            var token = new FakeApiToken(_server.JwtOptions);
-            var client = new FakeApiClient(_server, token);
-
-            var itemGroup = new ItemGroup().Of(token.TenantId);
+            var itemGroup = new ItemGroup().Of(_token.TenantId);
             var optionGroup = new OptionGroup().To(itemGroup);
             var option = new Option().To(optionGroup);
 
@@ -99,8 +94,8 @@ namespace Storefront.Menu.Tests.Functional.Options
             await _server.Database.SaveChangesAsync();
 
             var path = "/options?available=true";
-            var response = await client.GetAsync(path);
-            var jsonResponse = await client.ReadJsonAsync<OptionListJson>(response);
+            var response = await _client.GetAsync(path);
+            var jsonResponse = await _client.ReadJsonAsync<OptionListJson>(response);
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             Assert.Equal(1, jsonResponse.Count);
@@ -111,10 +106,7 @@ namespace Storefront.Menu.Tests.Functional.Options
         [Fact]
         public async Task ShouldListNotAvailable()
         {
-            var token = new FakeApiToken(_server.JwtOptions);
-            var client = new FakeApiClient(_server, token);
-
-            var itemGroup = new ItemGroup().Of(token.TenantId);
+            var itemGroup = new ItemGroup().Of(_token.TenantId);
             var optionGroup = new OptionGroup().To(itemGroup);
 
             var option1 = new Option().To(optionGroup, available: false);
@@ -127,8 +119,8 @@ namespace Storefront.Menu.Tests.Functional.Options
             await _server.Database.SaveChangesAsync();
 
             var path = "/options?available=false";
-            var response = await client.GetAsync(path);
-            var jsonResponse = await client.ReadJsonAsync<OptionListJson>(response);
+            var response = await _client.GetAsync(path);
+            var jsonResponse = await _client.ReadJsonAsync<OptionListJson>(response);
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             Assert.Equal(1, jsonResponse.Count);

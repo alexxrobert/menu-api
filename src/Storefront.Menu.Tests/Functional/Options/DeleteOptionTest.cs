@@ -18,19 +18,20 @@ namespace Storefront.Menu.Tests.Functional.Options
     public sealed class DeleteOptionTest
     {
         private readonly FakeApiServer _server;
+        private readonly FakeApiToken _token;
+        private readonly FakeApiClient _client;
 
         public DeleteOptionTest()
         {
             _server = new FakeApiServer();
+            _token = new FakeApiToken(_server.JwtOptions);
+            _client = new FakeApiClient(_server, _token);
         }
 
         [Fact]
         public async Task ShouldDeleteSuccessfully()
         {
-            var token = new FakeApiToken(_server.JwtOptions);
-            var client = new FakeApiClient(_server, token);
-
-            var itemGroup = new ItemGroup().Of(token.TenantId);
+            var itemGroup = new ItemGroup().Of(_token.TenantId);
             var optionGroup = new OptionGroup().To(itemGroup);
             var option = new Option().To(optionGroup);
 
@@ -41,9 +42,9 @@ namespace Storefront.Menu.Tests.Functional.Options
             await _server.Database.SaveChangesAsync();
 
             var path = $"/options/{option.Id}";
-            var response = await client.DeleteAsync(path);
+            var response = await _client.DeleteAsync(path);
             var hasBeenDeleted = !await _server.Database.Options
-                .WhereKey(token.TenantId, option.Id)
+                .WhereKey(_token.TenantId, option.Id)
                 .AnyAsync();
 
             Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
@@ -53,10 +54,7 @@ namespace Storefront.Menu.Tests.Functional.Options
         [Fact]
         public async Task ShouldPublishEventAfterDeleteSuccessfully()
         {
-            var token = new FakeApiToken(_server.JwtOptions);
-            var client = new FakeApiClient(_server, token);
-
-            var itemGroup = new ItemGroup().Of(token.TenantId);
+            var itemGroup = new ItemGroup().Of(_token.TenantId);
             var optionGroup = new OptionGroup().To(itemGroup);
             var option = new Option().To(optionGroup);
 
@@ -67,7 +65,7 @@ namespace Storefront.Menu.Tests.Functional.Options
             await _server.Database.SaveChangesAsync();
 
             var path = $"/options/{option.Id}";
-            var response = await client.DeleteAsync(path);
+            var response = await _client.DeleteAsync(path);
             var publishedEvent = _server.EventBus.PublishedEvents
                 .Single(@event => @event.Name == "menu.option.deleted");
             var payload = (OptionPayload)publishedEvent.Payload;
@@ -84,12 +82,9 @@ namespace Storefront.Menu.Tests.Functional.Options
         [Fact]
         public async Task ShouldRespond422ForInexistentId()
         {
-            var token = new FakeApiToken(_server.JwtOptions);
-            var client = new FakeApiClient(_server, token);
-
             var path = "/options/5";
-            var response = await client.DeleteAsync(path);
-            var jsonResponse = await client.ReadJsonAsync<UnprocessableEntityError>(response);
+            var response = await _client.DeleteAsync(path);
+            var jsonResponse = await _client.ReadJsonAsync<UnprocessableEntityError>(response);
 
             Assert.Equal(HttpStatusCode.UnprocessableEntity, response.StatusCode);
             Assert.Equal("OPTION_NOT_FOUND", jsonResponse.Error);

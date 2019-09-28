@@ -18,19 +18,20 @@ namespace Storefront.Menu.Tests.Functional.Options
     public sealed class UpdateOptionTest
     {
         private readonly FakeApiServer _server;
+        private readonly FakeApiToken _token;
+        private readonly FakeApiClient _client;
 
         public UpdateOptionTest()
         {
             _server = new FakeApiServer();
+            _token = new FakeApiToken(_server.JwtOptions);
+            _client = new FakeApiClient(_server, _token);
         }
 
         [Fact]
         public async Task ShouldUpdateSuccessfully()
         {
-            var token = new FakeApiToken(_server.JwtOptions);
-            var client = new FakeApiClient(_server, token);
-
-            var itemGroup = new ItemGroup().Of(token.TenantId);
+            var itemGroup = new ItemGroup().Of(_token.TenantId);
             var optionGroup1 = new OptionGroup().To(itemGroup);
             var optionGroup2 = new OptionGroup().To(itemGroup);
             var option = new Option().To(optionGroup1);
@@ -43,13 +44,13 @@ namespace Storefront.Menu.Tests.Functional.Options
 
             var path = $"/options/{option.Id}";
             var jsonRequest = new SaveOptionJson().Build(groupId: optionGroup2.Id);
-            var response = await client.PutJsonAsync(path, jsonRequest);
-            var jsonResponse = await client.ReadJsonAsync<OptionJson>(response);
+            var response = await _client.PutJsonAsync(path, jsonRequest);
+            var jsonResponse = await _client.ReadJsonAsync<OptionJson>(response);
 
             await _server.Database.Entry(option).ReloadAsync();
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            Assert.Equal(token.TenantId, option.TenantId);
+            Assert.Equal(_token.TenantId, option.TenantId);
             Assert.Equal(jsonRequest.GroupId, option.OptionGroupId);
             Assert.Equal(jsonRequest.Name, option.Name);
             Assert.Equal(jsonRequest.Description, option.Description);
@@ -66,10 +67,7 @@ namespace Storefront.Menu.Tests.Functional.Options
         [Fact]
         public async Task ShouldPublishEventAfterUpdateSuccessfully()
         {
-            var token = new FakeApiToken(_server.JwtOptions);
-            var client = new FakeApiClient(_server, token);
-
-            var itemGroup = new ItemGroup().Of(token.TenantId);
+            var itemGroup = new ItemGroup().Of(_token.TenantId);
             var optionGroup1 = new OptionGroup().To(itemGroup);
             var optionGroup2 = new OptionGroup().To(itemGroup);
             var option = new Option().To(optionGroup1);
@@ -82,7 +80,7 @@ namespace Storefront.Menu.Tests.Functional.Options
 
             var path = $"options/{option.Id}";
             var jsonRequest = new SaveOptionJson().Build(groupId: optionGroup2.Id);
-            var response = await client.PutJsonAsync(path, jsonRequest);
+            var response = await _client.PutJsonAsync(path, jsonRequest);
             var publishedEvent = _server.EventBus.PublishedEvents
                 .Single(@event => @event.Name == "menu.option.updated");
             var payload = (OptionPayload)publishedEvent.Payload;
@@ -101,10 +99,7 @@ namespace Storefront.Menu.Tests.Functional.Options
         [Fact]
         public async Task ShouldRespond422ForInexistentId()
         {
-            var token = new FakeApiToken(_server.JwtOptions);
-            var client = new FakeApiClient(_server, token);
-
-            var itemGroup = new ItemGroup().Of(token.TenantId);
+            var itemGroup = new ItemGroup().Of(_token.TenantId);
             var optionGroup = new OptionGroup().To(itemGroup);
 
             _server.Database.ItemGroups.Add(itemGroup);
@@ -114,8 +109,8 @@ namespace Storefront.Menu.Tests.Functional.Options
 
             var path = "/options/5";
             var jsonRequest = new SaveOptionJson().Build(groupId: optionGroup.Id);
-            var response = await client.PutJsonAsync(path, jsonRequest);
-            var jsonResponse = await client.ReadJsonAsync<UnprocessableEntityError>(response);
+            var response = await _client.PutJsonAsync(path, jsonRequest);
+            var jsonResponse = await _client.ReadJsonAsync<UnprocessableEntityError>(response);
 
             Assert.Equal(HttpStatusCode.UnprocessableEntity, response.StatusCode);
             Assert.Equal("OPTION_NOT_FOUND", jsonResponse.Error);
@@ -124,10 +119,7 @@ namespace Storefront.Menu.Tests.Functional.Options
         [Fact]
         public async Task ShouldRespond422ForInexistentGroupId()
         {
-            var token = new FakeApiToken(_server.JwtOptions);
-            var client = new FakeApiClient(_server, token);
-
-            var itemGroup = new ItemGroup().Of(token.TenantId);
+            var itemGroup = new ItemGroup().Of(_token.TenantId);
             var optionGroup = new OptionGroup().To(itemGroup);
             var option = new Option().To(optionGroup);
 
@@ -139,8 +131,8 @@ namespace Storefront.Menu.Tests.Functional.Options
 
             var path = $"/options/{option.Id}";
             var jsonRequest = new SaveOptionJson().Build(groupId: 80);
-            var response = await client.PutJsonAsync(path, jsonRequest);
-            var jsonResponse = await client.ReadJsonAsync<UnprocessableEntityError>(response);
+            var response = await _client.PutJsonAsync(path, jsonRequest);
+            var jsonResponse = await _client.ReadJsonAsync<UnprocessableEntityError>(response);
 
             Assert.Equal(HttpStatusCode.UnprocessableEntity, response.StatusCode);
             Assert.Equal("OPTION_GROUP_NOT_FOUND", jsonResponse.Error);

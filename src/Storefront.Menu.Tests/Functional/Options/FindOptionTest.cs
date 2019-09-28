@@ -16,19 +16,20 @@ namespace Storefront.Menu.Tests.Functional.Options
     public sealed class FindOptionTest
     {
         private readonly FakeApiServer _server;
+        private readonly FakeApiToken _token;
+        private readonly FakeApiClient _client;
 
         public FindOptionTest()
         {
             _server = new FakeApiServer();
+            _token = new FakeApiToken(_server.JwtOptions);
+            _client = new FakeApiClient(_server, _token);
         }
 
         [Fact]
         public async Task ShouldFindSuccessfully()
         {
-            var token = new FakeApiToken(_server.JwtOptions);
-            var client = new FakeApiClient(_server, token);
-
-            var itemGroup = new ItemGroup().Of(token.TenantId);
+            var itemGroup = new ItemGroup().Of(_token.TenantId);
             var optionGroup = new OptionGroup().To(itemGroup);
             var option = new Option().To(optionGroup);
 
@@ -39,8 +40,8 @@ namespace Storefront.Menu.Tests.Functional.Options
             await _server.Database.SaveChangesAsync();
 
             var path = $"/options/{option.Id}";
-            var response = await client.GetAsync(path);
-            var jsonResponse = await client.ReadJsonAsync<OptionJson>(response);
+            var response = await _client.GetAsync(path);
+            var jsonResponse = await _client.ReadJsonAsync<OptionJson>(response);
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             Assert.Equal(option.Id, jsonResponse.Id);
@@ -53,12 +54,9 @@ namespace Storefront.Menu.Tests.Functional.Options
         [Fact]
         public async Task ShouldRespond422ForInexistentId()
         {
-            var token = new FakeApiToken(_server.JwtOptions);
-            var client = new FakeApiClient(_server, token);
-
             var path = "/options/5";
-            var response = await client.GetAsync(path);
-            var jsonResponse = await client.ReadJsonAsync<UnprocessableEntityError>(response);
+            var response = await _client.GetAsync(path);
+            var jsonResponse = await _client.ReadJsonAsync<UnprocessableEntityError>(response);
 
             Assert.Equal(HttpStatusCode.UnprocessableEntity, response.StatusCode);
             Assert.Equal("OPTION_NOT_FOUND", jsonResponse.Error);
