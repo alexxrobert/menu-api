@@ -31,10 +31,6 @@ namespace Storefront.Menu.API.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnName("id");
 
-                    b.Property<string>("PictureFileId")
-                        .HasColumnName("picture_file_id")
-                        .HasMaxLength(50);
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnName("title")
@@ -68,10 +64,6 @@ namespace Storefront.Menu.API.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnName("name")
-                        .HasMaxLength(50);
-
-                    b.Property<string>("PictureFileId")
-                        .HasColumnName("picture_file_id")
                         .HasMaxLength(50);
 
                     b.Property<decimal>("Price")

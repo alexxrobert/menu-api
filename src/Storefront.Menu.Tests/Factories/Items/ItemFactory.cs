@@ -11,7 +11,6 @@ namespace Storefront.Menu.Tests.Factories.Items
             item.TenantId = itemGroup.TenantId;
             item.Name = ConstantFactory.Text();
             item.Description = ConstantFactory.Text(length: 50, wordCount: 6);
-            item.PictureFileId = Guid.NewGuid().ToString();
             item.Price = 5;
             item.IsAvailable = available;
             item.ItemGroup = itemGroup;

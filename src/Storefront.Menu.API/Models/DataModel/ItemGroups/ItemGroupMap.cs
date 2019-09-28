@@ -31,10 +31,6 @@ namespace Storefront.Menu.API.Models.DataModel.ItemGroups
                 .HasMaxLength(50)
                 .IsRequired();
 
-            itemGroup.Property(p => p.PictureFileId)
-                .HasColumnName("picture_file_id")
-                .HasMaxLength(50);
-
             itemGroup.HasMany(p => p.Items)
                 .WithOne(p => p.ItemGroup)
                 .HasForeignKey(p => new
