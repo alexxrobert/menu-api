@@ -1,6 +1,6 @@
 # Menu API
 
-Configure items in the restaurant menu that can be customized by the customer to create the order.
+Set up restaurant menu items that can be customized by the customer when ordering.
 
 ## Status
 
