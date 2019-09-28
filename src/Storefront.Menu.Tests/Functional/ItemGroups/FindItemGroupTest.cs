@@ -12,26 +12,27 @@ namespace Storefront.Menu.Tests.Functional.ItemGroups
     public sealed class FindItemGroupTest
     {
         private readonly FakeApiServer _server;
+        private readonly FakeApiToken _token;
+        private readonly FakeApiClient _client;
 
         public FindItemGroupTest()
         {
             _server = new FakeApiServer();
+            _token = new FakeApiToken(_server.JwtOptions);
+            _client = new FakeApiClient(_server, _token);
         }
 
         [Fact]
         public async Task ShouldFindSuccessfully()
         {
-            var token = new FakeApiToken(_server.JwtOptions);
-            var client = new FakeApiClient(_server, token);
-
-            var itemGroup = new ItemGroup().Of(token.TenantId);
+            var itemGroup = new ItemGroup().Of(_token.TenantId);
 
             _server.Database.ItemGroups.Add(itemGroup);
             await _server.Database.SaveChangesAsync();
 
             var path = $"/item-groups/{itemGroup.Id}";
-            var response = await client.GetAsync(path);
-            var jsonResponse = await client.ReadJsonAsync<ItemGroupJson>(response);
+            var response = await _client.GetAsync(path);
+            var jsonResponse = await _client.ReadJsonAsync<ItemGroupJson>(response);
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             Assert.Equal(itemGroup.Id, jsonResponse.Id);
@@ -41,13 +42,10 @@ namespace Storefront.Menu.Tests.Functional.ItemGroups
         [Fact]
         public async Task ShouldRespond422ForInexistentId()
         {
-            var token = new FakeApiToken(_server.JwtOptions);
-            var client = new FakeApiClient(_server, token);
-
             var path = "/item-groups/5";
             var jsonRequest = new SaveItemGroupJson().Build();
-            var response = await client.GetAsync(path);
-            var jsonResponse = await client.ReadJsonAsync<UnprocessableEntityError>(response);
+            var response = await _client.GetAsync(path);
+            var jsonResponse = await _client.ReadJsonAsync<UnprocessableEntityError>(response);
 
             Assert.Equal(HttpStatusCode.UnprocessableEntity, response.StatusCode);
             Assert.Equal("ITEM_GROUP_NOT_FOUND", jsonResponse.Error);

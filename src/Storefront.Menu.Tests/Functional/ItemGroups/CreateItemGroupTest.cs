@@ -13,38 +13,36 @@ namespace Storefront.Menu.Tests.Functional.ItemGroups
     public sealed class CreateItemGroupTest
     {
         private readonly FakeApiServer _server;
+        private readonly FakeApiToken _token;
+        private readonly FakeApiClient _client;
 
         public CreateItemGroupTest()
         {
             _server = new FakeApiServer();
+            _token = new FakeApiToken(_server.JwtOptions);
+            _client = new FakeApiClient(_server, _token);
         }
 
         [Fact]
         public async Task ShouldCreateSuccessfully()
         {
-            var token = new FakeApiToken(_server.JwtOptions);
-            var client = new FakeApiClient(_server, token);
-
             var path = "/item-groups";
             var jsonRequest = new SaveItemGroupJson().Build();
-            var response = await client.PostJsonAsync(path, jsonRequest);
-            var jsonResponse = await client.ReadJsonAsync<ItemGroupJson>(response);
+            var response = await _client.PostJsonAsync(path, jsonRequest);
+            var jsonResponse = await _client.ReadJsonAsync<ItemGroupJson>(response);
             var itemGroup = await _server.Database.ItemGroups.SingleAsync();
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            Assert.Equal(token.TenantId, itemGroup.TenantId);
+            Assert.Equal(_token.TenantId, itemGroup.TenantId);
             Assert.Equal(jsonRequest.Title, itemGroup.Title);
         }
 
         [Fact]
         public async Task ShouldPublishEventAfterCreateSuccessfully()
         {
-            var token = new FakeApiToken(_server.JwtOptions);
-            var client = new FakeApiClient(_server, token);
-
             var path = "/item-groups";
             var jsonRequest = new SaveItemGroupJson().Build();
-            var response = await client.PostJsonAsync(path, jsonRequest);
+            var response = await _client.PostJsonAsync(path, jsonRequest);
             var itemGroup = await _server.Database.ItemGroups.SingleAsync();
             var publishedEvent = _server.EventBus.PublishedEvents
                 .Single(@event => @event.Name == "menu.item-group.created");

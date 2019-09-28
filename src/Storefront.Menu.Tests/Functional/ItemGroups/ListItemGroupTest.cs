@@ -11,27 +11,28 @@ namespace Storefront.Menu.Tests.Functional.ItemGroups
     public sealed class ListItemGroupTest
     {
         private readonly FakeApiServer _server;
+        private readonly FakeApiToken _token;
+        private readonly FakeApiClient _client;
 
         public ListItemGroupTest()
         {
             _server = new FakeApiServer();
+            _token = new FakeApiToken(_server.JwtOptions);
+            _client = new FakeApiClient(_server, _token);
         }
 
         [Fact]
         public async Task ShouldListAll()
         {
-            var token = new FakeApiToken(_server.JwtOptions);
-            var client = new FakeApiClient(_server, token);
-
-            var itemGroup1 = new ItemGroup().Of(token.TenantId);
-            var itemGroup2 = new ItemGroup().Of(token.TenantId);
+            var itemGroup1 = new ItemGroup().Of(_token.TenantId);
+            var itemGroup2 = new ItemGroup().Of(_token.TenantId);
 
             _server.Database.ItemGroups.AddRange(itemGroup1, itemGroup2);
             await _server.Database.SaveChangesAsync();
 
             var path = "/item-groups";
-            var response = await client.GetAsync(path);
-            var jsonResponse = await client.ReadJsonAsync<ItemGroupListJson>(response);
+            var response = await _client.GetAsync(path);
+            var jsonResponse = await _client.ReadJsonAsync<ItemGroupListJson>(response);
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             Assert.Equal(2, jsonResponse.Count);
@@ -42,18 +43,15 @@ namespace Storefront.Menu.Tests.Functional.ItemGroups
         [Fact]
         public async Task ShouldListByTitle()
         {
-            var token = new FakeApiToken(_server.JwtOptions);
-            var client = new FakeApiClient(_server, token);
-
-            var itemGroup1 = new ItemGroup().Of(token.TenantId);
-            var itemGroup2 = new ItemGroup().Of(token.TenantId);
+            var itemGroup1 = new ItemGroup().Of(_token.TenantId);
+            var itemGroup2 = new ItemGroup().Of(_token.TenantId);
 
             _server.Database.ItemGroups.AddRange(itemGroup1, itemGroup2);
             await _server.Database.SaveChangesAsync();
 
             var path = $"/item-groups?title={itemGroup1.Title}";
-            var response = await client.GetAsync(path);
-            var jsonResponse = await client.ReadJsonAsync<ItemGroupListJson>(response);
+            var response = await _client.GetAsync(path);
+            var jsonResponse = await _client.ReadJsonAsync<ItemGroupListJson>(response);
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             Assert.Equal(1, jsonResponse.Count);
