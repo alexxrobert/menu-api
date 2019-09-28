@@ -16,7 +16,7 @@ namespace Storefront.Menu.API.Models.DataModel.Items
             return items.Where(item => item.TenantId == tenantId);
         }
 
-        public static IQueryable<Item> WhereId(this IQueryable<Item> items, long tenantId, long itemId)
+        public static IQueryable<Item> WhereKey(this IQueryable<Item> items, long tenantId, long itemId)
         {
             return items.Where(item => item.Id == itemId);
         }

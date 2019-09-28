@@ -39,7 +39,7 @@ namespace Storefront.Menu.Tests.Functional.Items
             var path = $"/items/{item.Id}";
             var response = await client.DeleteAsync(path);
             var hasBeenDeleted = !await _server.Database.Items
-                .WhereId(token.TenantId, item.Id)
+                .WhereKey(token.TenantId, item.Id)
                 .AnyAsync();
 
             Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);

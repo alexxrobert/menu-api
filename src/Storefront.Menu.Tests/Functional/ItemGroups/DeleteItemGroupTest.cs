@@ -36,7 +36,7 @@ namespace Storefront.Menu.Tests.Functional.ItemGroups
             var path = $"/item-groups/{itemGroup.Id}";
             var response = await client.DeleteAsync(path);
             var hasBeenDeleted = !await _server.Database.ItemGroups
-                .WhereId(token.TenantId, itemGroup.Id)
+                .WhereKey(token.TenantId, itemGroup.Id)
                 .AnyAsync();
 
             Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
@@ -99,7 +99,7 @@ namespace Storefront.Menu.Tests.Functional.ItemGroups
             var response = await client.DeleteAsync(path);
             var jsonResponse = await client.ReadJsonAsync<UnprocessableEntityError>(response);
             var hasBeenDeleted = !await _server.Database.ItemGroups
-                .WhereId(token.TenantId, itemGroup.Id)
+                .WhereKey(token.TenantId, itemGroup.Id)
                 .AnyAsync();
 
             Assert.Equal(HttpStatusCode.UnprocessableEntity, response.StatusCode);

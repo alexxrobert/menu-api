@@ -40,7 +40,7 @@ namespace Storefront.Menu.API.Models.ServiceModel
         public async Task Find(long tenantId, long itemId)
         {
             Item = await _dbContext.Items
-                .WhereId(tenantId, itemId)
+                .WhereKey(tenantId, itemId)
                 .SingleOrDefaultAsync();
 
             ItemNotExists = Item == null;
