@@ -25,6 +25,8 @@ namespace Storefront.Menu.API
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<RabbitMQOptions>(_configuration.GetSection("RabbitMQ"));
+
             services.AddDbContext<ApiDbContext>(options =>
             {
                 options.UseNpgsql(_configuration["ConnectionString:PostgreSQL"], pgsql =>
