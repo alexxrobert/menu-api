@@ -1,4 +1,4 @@
-using Storefront.Menu.API.Models.TransferModel.Errors;
+using Storefront.Menu.API.Models.TransferModel;
 
 namespace Storefront.Menu.API.Models.TransferModel.OptionGroups
 {

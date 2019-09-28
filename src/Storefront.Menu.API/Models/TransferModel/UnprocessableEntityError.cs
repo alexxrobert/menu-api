@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Storefront.Menu.API.Models.TransferModel.Errors
+namespace Storefront.Menu.API.Models.TransferModel
 {
     public class UnprocessableEntityError : IActionResult
     {

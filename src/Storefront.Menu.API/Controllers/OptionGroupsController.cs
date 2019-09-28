@@ -8,7 +8,7 @@ using Storefront.Menu.API.Models.DataModel;
 using Storefront.Menu.API.Models.DataModel.OptionGroups;
 using Storefront.Menu.API.Models.IntegrationModel.EventBus;
 using Storefront.Menu.API.Models.ServiceModel;
-using Storefront.Menu.API.Models.TransferModel.Errors;
+using Storefront.Menu.API.Models.TransferModel;
 using Storefront.Menu.API.Models.TransferModel.OptionGroups;
 
 namespace Storefront.Menu.API.Controllers
