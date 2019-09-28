@@ -9,7 +9,6 @@ namespace Storefront.Menu.API.Models.DataModel.Items
         public long ItemGroupId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public string PictureFileId { get; set; }
         public decimal Price { get; set; }
         public bool IsAvailable { get; set; }
         public ItemGroup ItemGroup { get; set; }

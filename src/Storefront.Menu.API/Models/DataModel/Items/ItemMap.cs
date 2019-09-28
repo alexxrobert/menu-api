@@ -47,10 +47,6 @@ namespace Storefront.Menu.API.Models.DataModel.Items
             item.Property(p => p.Description)
                 .HasColumnName("description")
                 .HasMaxLength(255);
-
-            item.Property(p => p.PictureFileId)
-                .HasColumnName("picture_file_id")
-                .HasMaxLength(50);
         }
     }
 }
