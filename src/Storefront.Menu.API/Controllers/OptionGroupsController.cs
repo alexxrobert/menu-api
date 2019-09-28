@@ -23,12 +23,12 @@ namespace Storefront.Menu.API.Controllers
     public sealed class OptionGroupsController : Controller
     {
         private readonly ApiDbContext _dbContext;
-        private readonly IEventBus _eventBus;
+        private readonly IMessageBroker _messageBroker;
 
-        public OptionGroupsController(ApiDbContext dbContext, IEventBus eventBus)
+        public OptionGroupsController(ApiDbContext dbContext, IMessageBroker messageBroker)
         {
             _dbContext = dbContext;
-            _eventBus = eventBus;
+            _messageBroker = messageBroker;
         }
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace Storefront.Menu.API.Controllers
         [ProducesResponseType(statusCode: 422, type: typeof(UnprocessableEntityError))]
         public async Task<IActionResult> Find([FromRoute] long itemGroupId, [FromRoute] long id)
         {
-            var catalog = new OptionGroupCatalog(_dbContext, _eventBus);
+            var catalog = new OptionGroupCatalog(_dbContext, _messageBroker);
             var tenantId = User.Claims.TenantId();
 
             await catalog.Find(tenantId, itemGroupId, id);
@@ -94,7 +94,7 @@ namespace Storefront.Menu.API.Controllers
         [ProducesResponseType(statusCode: 200, type: typeof(OptionGroupListJson))]
         public async Task<IActionResult> Create([FromRoute] long itemGroupId, [FromBody] SaveOptionGroupJson json)
         {
-            var catalog = new OptionGroupCatalog(_dbContext, _eventBus);
+            var catalog = new OptionGroupCatalog(_dbContext, _messageBroker);
 
             var optionGroup = json.MapTo(new OptionGroup
             {
@@ -121,7 +121,7 @@ namespace Storefront.Menu.API.Controllers
         public async Task<IActionResult> Update([FromRoute] long itemGroupId, [FromRoute] long id,
             [FromBody] SaveOptionGroupJson json)
         {
-            var catalog = new OptionGroupCatalog(_dbContext, _eventBus);
+            var catalog = new OptionGroupCatalog(_dbContext, _messageBroker);
             var tenantId = User.Claims.TenantId();
 
             await catalog.Find(tenantId, itemGroupId, id);
@@ -151,7 +151,7 @@ namespace Storefront.Menu.API.Controllers
         [ProducesResponseType(statusCode: 422, type: typeof(UnprocessableEntityError))]
         public async Task<IActionResult> Delete([FromRoute] long itemGroupId, [FromRoute] long id)
         {
-            var catalog = new OptionGroupCatalog(_dbContext, _eventBus);
+            var catalog = new OptionGroupCatalog(_dbContext, _messageBroker);
             var tenantId = User.Claims.TenantId();
 
             await catalog.Find(tenantId, itemGroupId, id);

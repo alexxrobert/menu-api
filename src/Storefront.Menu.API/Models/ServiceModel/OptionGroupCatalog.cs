@@ -11,12 +11,12 @@ namespace Storefront.Menu.API.Models.ServiceModel
     public sealed class OptionGroupCatalog
     {
         private readonly ApiDbContext _dbContext;
-        private readonly IEventBus _eventBus;
+        private readonly IMessageBroker _messageBroker;
 
-        public OptionGroupCatalog(ApiDbContext dbContext, IEventBus eventBus)
+        public OptionGroupCatalog(ApiDbContext dbContext, IMessageBroker messageBroker)
         {
             _dbContext = dbContext;
-            _eventBus = eventBus;
+            _messageBroker = messageBroker;
         }
 
         public OptionGroup OptionGroup { get; private set; }
@@ -31,7 +31,7 @@ namespace Storefront.Menu.API.Models.ServiceModel
 
             await _dbContext.SaveChangesAsync();
 
-            _eventBus.Publish(new OptionGroupCreatedEvent(OptionGroup));
+            _messageBroker.Publish(new OptionGroupCreatedEvent(OptionGroup));
         }
 
         public async Task Find(long tenantId, long itemGroupId, long optionGroupId)
@@ -48,7 +48,7 @@ namespace Storefront.Menu.API.Models.ServiceModel
         {
             await _dbContext.SaveChangesAsync();
 
-            _eventBus.Publish(new OptionGroupUpdatedEvent(OptionGroup));
+            _messageBroker.Publish(new OptionGroupUpdatedEvent(OptionGroup));
         }
 
         public async Task Delete()
@@ -63,7 +63,7 @@ namespace Storefront.Menu.API.Models.ServiceModel
 
             await _dbContext.SaveChangesAsync();
 
-            _eventBus.Publish(new OptionGroupDeletedEvent(OptionGroup));
+            _messageBroker.Publish(new OptionGroupDeletedEvent(OptionGroup));
         }
     }
 }

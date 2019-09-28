@@ -24,12 +24,12 @@ namespace Storefront.Menu.API.Controllers
     public sealed class ItemsController : Controller
     {
         private readonly ApiDbContext _dbContext;
-        private readonly IEventBus _eventBus;
+        private readonly IMessageBroker _messageBroker;
 
-        public ItemsController(ApiDbContext dbContext, IEventBus eventBus)
+        public ItemsController(ApiDbContext dbContext, IMessageBroker messageBroker)
         {
             _dbContext = dbContext;
-            _eventBus = eventBus;
+            _messageBroker = messageBroker;
         }
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace Storefront.Menu.API.Controllers
         [ProducesResponseType(statusCode: 422, type: typeof(UnprocessableEntityError))]
         public async Task<IActionResult> Find([FromRoute] long id)
         {
-            var catalog = new ItemCatalog(_dbContext, _eventBus);
+            var catalog = new ItemCatalog(_dbContext, _messageBroker);
             var tenantId = User.Claims.TenantId();
 
             await catalog.Find(tenantId, id);
@@ -93,7 +93,7 @@ namespace Storefront.Menu.API.Controllers
         [ProducesResponseType(statusCode: 200, type: typeof(ItemListJson))]
         public async Task<IActionResult> Create([FromBody] SaveItemJson json)
         {
-            var catalog = new ItemCatalog(_dbContext, _eventBus);
+            var catalog = new ItemCatalog(_dbContext, _messageBroker);
 
             var item = json.MapTo(new Item
             {
@@ -123,7 +123,7 @@ namespace Storefront.Menu.API.Controllers
         [ProducesResponseType(statusCode: 422, type: typeof(UnprocessableEntityError))]
         public async Task<IActionResult> Update([FromRoute] long id, [FromBody] SaveItemJson json)
         {
-            var catalog = new ItemCatalog(_dbContext, _eventBus);
+            var catalog = new ItemCatalog(_dbContext, _messageBroker);
             var tenantId = User.Claims.TenantId();
 
             await catalog.Find(tenantId, id);
@@ -157,7 +157,7 @@ namespace Storefront.Menu.API.Controllers
         [ProducesResponseType(statusCode: 422, type: typeof(UnprocessableEntityError))]
         public async Task<IActionResult> Delete([FromRoute] long id)
         {
-            var catalog = new ItemCatalog(_dbContext, _eventBus);
+            var catalog = new ItemCatalog(_dbContext, _messageBroker);
             var tenantId = User.Claims.TenantId();
 
             await catalog.Find(tenantId, id);

@@ -1,8 +1,8 @@
 using System;
 
-namespace Storefront.Menu.API.Models.EventModel
+namespace Storefront.Menu.API.Models.IntegrationModel.EventBus
 {
-    public class Event<TPayload> : IEvent where TPayload : class
+    public class Event<TPayload>
     {
         public Event()
         {
@@ -14,6 +14,5 @@ namespace Storefront.Menu.API.Models.EventModel
         public DateTime CreatedAt { get; set; }
         public string Name { get; set; }
         public TPayload Payload { get; set; }
-        object IEvent.Payload => Payload;
     }
 }

@@ -11,12 +11,12 @@ namespace Storefront.Menu.API.Models.ServiceModel
     public sealed class ItemGroupCatalog
     {
         private readonly ApiDbContext _dbContext;
-        private readonly IEventBus _eventBus;
+        private readonly IMessageBroker _messageBroker;
 
-        public ItemGroupCatalog(ApiDbContext dbContext, IEventBus eventBus)
+        public ItemGroupCatalog(ApiDbContext dbContext, IMessageBroker messageBroker)
         {
             _dbContext = dbContext;
-            _eventBus = eventBus;
+            _messageBroker = messageBroker;
         }
 
         public ItemGroup ItemGroup { get; private set; }
@@ -31,7 +31,7 @@ namespace Storefront.Menu.API.Models.ServiceModel
 
             await _dbContext.SaveChangesAsync();
 
-            _eventBus.Publish(new ItemGroupCreatedEvent(ItemGroup));
+            _messageBroker.Publish(new ItemGroupCreatedEvent(ItemGroup));
         }
 
         public async Task Find(long tenantId, long itemGroupId)
@@ -47,7 +47,7 @@ namespace Storefront.Menu.API.Models.ServiceModel
         {
             await _dbContext.SaveChangesAsync();
 
-            _eventBus.Publish(new ItemGroupUpdatedEvent(ItemGroup));
+            _messageBroker.Publish(new ItemGroupUpdatedEvent(ItemGroup));
         }
 
         public async Task Delete()
@@ -62,7 +62,7 @@ namespace Storefront.Menu.API.Models.ServiceModel
 
             await _dbContext.SaveChangesAsync();
 
-            _eventBus.Publish(new ItemGroupDeletedEvent(ItemGroup));
+            _messageBroker.Publish(new ItemGroupDeletedEvent(ItemGroup));
         }
     }
 }

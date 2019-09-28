@@ -36,7 +36,9 @@ namespace Storefront.Menu.Tests
             services.AddDefaultCorsPolicy();
             services.AddJwtAuthentication(_configuration.GetSection("Auth"));
 
-            services.AddSingleton<IEventBus, FakeEventBus>();
+            services.AddSingleton<EventBinding>();
+
+            services.AddSingleton<IMessageBroker, FakeMessageBroker>();
         }
 
         public void Configure(IApplicationBuilder app)

@@ -1,5 +1,5 @@
-using System;
 using Storefront.Menu.API.Models.DataModel.Items;
+using Storefront.Menu.API.Models.IntegrationModel.EventBus;
 
 namespace Storefront.Menu.API.Models.EventModel.Published.Items
 {
