@@ -16,20 +16,21 @@ namespace Storefront.Menu.Tests.Functional.Items
     public sealed class UpdateItemTest
     {
         private readonly FakeApiServer _server;
+        private readonly FakeApiToken _token;
+        private readonly FakeApiClient _client;
 
         public UpdateItemTest()
         {
             _server = new FakeApiServer();
+            _token = new FakeApiToken(_server.JwtOptions);
+            _client = new FakeApiClient(_server, _token);
         }
 
         [Fact]
         public async Task ShouldUpdateSuccessfully()
         {
-            var token = new FakeApiToken(_server.JwtOptions);
-            var client = new FakeApiClient(_server, token);
-
-            var itemGroup1 = new ItemGroup().Of(token.TenantId);
-            var itemGroup2 = new ItemGroup().Of(token.TenantId);
+            var itemGroup1 = new ItemGroup().Of(_token.TenantId);
+            var itemGroup2 = new ItemGroup().Of(_token.TenantId);
             var item = new Item().To(itemGroup1);
 
             _server.Database.ItemGroups.AddRange(itemGroup1, itemGroup2);
@@ -39,13 +40,13 @@ namespace Storefront.Menu.Tests.Functional.Items
 
             var path = $"/items/{item.Id}";
             var jsonRequest = new SaveItemJson().Build(groupId: itemGroup2.Id);
-            var response = await client.PutJsonAsync(path, jsonRequest);
-            var jsonResponse = await client.ReadJsonAsync<ItemJson>(response);
+            var response = await _client.PutJsonAsync(path, jsonRequest);
+            var jsonResponse = await _client.ReadJsonAsync<ItemJson>(response);
 
             await _server.Database.Entry(item).ReloadAsync();
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            Assert.Equal(token.TenantId, item.TenantId);
+            Assert.Equal(_token.TenantId, item.TenantId);
             Assert.Equal(jsonRequest.GroupId, item.ItemGroupId);
             Assert.Equal(jsonRequest.Name, item.Name);
             Assert.Equal(jsonRequest.Description, item.Description);
@@ -62,10 +63,7 @@ namespace Storefront.Menu.Tests.Functional.Items
         [Fact]
         public async Task ShouldPublishEventAfterUpdateSuccessfully()
         {
-            var token = new FakeApiToken(_server.JwtOptions);
-            var client = new FakeApiClient(_server, token);
-
-            var itemGroup = new ItemGroup().Of(token.TenantId);
+            var itemGroup = new ItemGroup().Of(_token.TenantId);
             var item = new Item().To(itemGroup);
 
             _server.Database.ItemGroups.Add(itemGroup);
@@ -75,7 +73,7 @@ namespace Storefront.Menu.Tests.Functional.Items
 
             var path = $"/items/{item.Id}";
             var jsonRequest = new SaveItemJson().Build(groupId: itemGroup.Id);
-            var response = await client.PutJsonAsync(path, jsonRequest);
+            var response = await _client.PutJsonAsync(path, jsonRequest);
             var publishedEvent = _server.EventBus.PublishedEvents
                 .Single(@event => @event.Name == "menu.item.updated");
             var payload = (ItemPayload)publishedEvent.Payload;
@@ -94,10 +92,7 @@ namespace Storefront.Menu.Tests.Functional.Items
         [Fact]
         public async Task ShouldRespond422ForInexistentId()
         {
-            var token = new FakeApiToken(_server.JwtOptions);
-            var client = new FakeApiClient(_server, token);
-
-            var itemGroup = new ItemGroup().Of(token.TenantId);
+            var itemGroup = new ItemGroup().Of(_token.TenantId);
 
             _server.Database.ItemGroups.Add(itemGroup);
 
@@ -105,8 +100,8 @@ namespace Storefront.Menu.Tests.Functional.Items
 
             var path = "/items/5";
             var jsonRequest = new SaveItemJson().Build(groupId: itemGroup.Id);
-            var response = await client.PutJsonAsync(path, jsonRequest);
-            var jsonResponse = await client.ReadJsonAsync<UnprocessableEntityError>(response);
+            var response = await _client.PutJsonAsync(path, jsonRequest);
+            var jsonResponse = await _client.ReadJsonAsync<UnprocessableEntityError>(response);
 
             Assert.Equal(HttpStatusCode.UnprocessableEntity, response.StatusCode);
             Assert.Equal("ITEM_NOT_FOUND", jsonResponse.Error);
@@ -115,10 +110,7 @@ namespace Storefront.Menu.Tests.Functional.Items
         [Fact]
         public async Task ShouldRespond422ForInexistentGroupId()
         {
-            var token = new FakeApiToken(_server.JwtOptions);
-            var client = new FakeApiClient(_server, token);
-
-            var itemGroup = new ItemGroup().Of(token.TenantId);
+            var itemGroup = new ItemGroup().Of(_token.TenantId);
             var item = new Item().To(itemGroup);
 
             _server.Database.ItemGroups.Add(itemGroup);
@@ -128,8 +120,8 @@ namespace Storefront.Menu.Tests.Functional.Items
 
             var path = $"/items/{item.Id}";
             var jsonRequest = new SaveItemJson().Build(groupId: 80);
-            var response = await client.PutJsonAsync(path, jsonRequest);
-            var jsonResponse = await client.ReadJsonAsync<UnprocessableEntityError>(response);
+            var response = await _client.PutJsonAsync(path, jsonRequest);
+            var jsonResponse = await _client.ReadJsonAsync<UnprocessableEntityError>(response);
 
             Assert.Equal(HttpStatusCode.UnprocessableEntity, response.StatusCode);
             Assert.Equal("ITEM_GROUP_NOT_FOUND", jsonResponse.Error);
