@@ -53,7 +53,8 @@ namespace Storefront.Menu.API.Models.ServiceModel
         public async Task Delete()
         {
             GroupHasItems = await _dbContext.Items
-                .WhereItemGroupId(ItemGroup.TenantId, ItemGroup.Id)
+                .WhereTenantId(ItemGroup.TenantId)
+                .WhereItemGroupId(ItemGroup.Id)
                 .AnyAsync();
 
             if (GroupHasItems) return;

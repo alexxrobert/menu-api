@@ -34,7 +34,7 @@ namespace Storefront.Menu.Tests.Functional.Items
 
             await _server.Database.SaveChangesAsync();
 
-            var path = "/items";
+            var path = $"/item-groups/{itemGroup.Id}/items";
             var response = await client.GetAsync(path);
             var jsonResponse = await client.ReadJsonAsync<ItemListJson>(response);
 
@@ -59,7 +59,7 @@ namespace Storefront.Menu.Tests.Functional.Items
 
             await _server.Database.SaveChangesAsync();
 
-            var path = $"/items?name={item1.Name}";
+            var path = $"/item-groups/{itemGroup.Id}/items?name={item1.Name}";
             var response = await client.GetAsync(path);
             var jsonResponse = await client.ReadJsonAsync<ItemListJson>(response);
 
@@ -84,7 +84,7 @@ namespace Storefront.Menu.Tests.Functional.Items
 
             await _server.Database.SaveChangesAsync();
 
-            var path = "/items?available=true";
+            var path = $"/item-groups/{itemGroup.Id}/items?available=true";
             var response = await client.GetAsync(path);
             var jsonResponse = await client.ReadJsonAsync<ItemListJson>(response);
 
@@ -109,7 +109,7 @@ namespace Storefront.Menu.Tests.Functional.Items
 
             await _server.Database.SaveChangesAsync();
 
-            var path = "/items?available=false";
+            var path = $"/item-groups/{itemGroup.Id}/items?available=false";
             var response = await client.GetAsync(path);
             var jsonResponse = await client.ReadJsonAsync<ItemListJson>(response);
 
