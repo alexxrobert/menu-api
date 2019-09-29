@@ -29,7 +29,7 @@ namespace StorefrontCommunity.Menu.API
 
             services.AddDbContext<ApiDbContext>(options =>
             {
-                options.UseNpgsql(_configuration["ConnectionString:PostgreSQL"], pgsql =>
+                options.UseNpgsql(_configuration["ConnectionString"], pgsql =>
                 {
                     pgsql.MigrationsHistoryTable(tableName: "__migration_history", schema: ApiDbContext.Schema);
                 });
@@ -41,7 +41,7 @@ namespace StorefrontCommunity.Menu.API
             });
 
             services.AddDefaultCorsPolicy();
-            services.AddJwtAuthentication(_configuration.GetSection("Auth"));
+            services.AddJwtAuthentication(_configuration.GetSection("JWT"));
             services.AddSwaggerDocumentation();
 
             services.AddScoped<IMessageBroker, RabbitMQBroker>();
