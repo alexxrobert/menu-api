@@ -3,8 +3,8 @@
 set -e
 
 solution_dir="src"
-api_project_dir="Storefront.Menu.API"
-test_project_dir="Storefront.Menu.Tests"
+api_project_dir="StorefrontCommunity.Menu.API"
+test_project_dir="StorefrontCommunity.Menu.Tests"
 
 dotnet clean $solution_dir
 
