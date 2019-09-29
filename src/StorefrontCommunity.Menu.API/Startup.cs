@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using StorefrontCommunity.Menu.API.Authorization;
-using StorefrontCommunity.Menu.API.Extensions;
 using StorefrontCommunity.Menu.API.Filters;
 using StorefrontCommunity.Menu.API.Models.DataModel;
 using StorefrontCommunity.Menu.API.Models.IntegrationModel.EventBus;
 using StorefrontCommunity.Menu.API.Models.IntegrationModel.EventBus.RabbitMQ;
+using StorefrontCommunity.Menu.API.Swagger;
 
 namespace StorefrontCommunity.Menu.API
 {

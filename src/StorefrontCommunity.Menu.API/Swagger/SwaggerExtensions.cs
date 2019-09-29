@@ -7,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerUI;
 
-namespace StorefrontCommunity.Menu.API.Extensions
+namespace StorefrontCommunity.Menu.API.Swagger
 {
     [ExcludeFromCodeCoverage]
     public static class SwaggerExtensions
@@ -22,9 +22,11 @@ namespace StorefrontCommunity.Menu.API.Extensions
                     Version = "v1"
                 });
 
+                options.DocumentFilter<SecurityRequirementsFilter>();
+
                 options.AddSecurityDefinition("Bearer", new ApiKeyScheme
                 {
-                    Description = "JWT authorization header using the Bearer scheme. Example: Bearer <TOKEN>",
+                    Description = "JWT authorization header using the Bearer scheme. Example: `Bearer <token>`",
                     Name = "Authorization",
                     In = "header",
                     Type = "apiKey"
@@ -36,6 +38,8 @@ namespace StorefrontCommunity.Menu.API.Extensions
                 options.IncludeXmlComments(xmlPath);
                 options.DocInclusionPredicate((_, api) => !string.IsNullOrWhiteSpace(api.GroupName));
                 options.TagActionsBy(api => new[] { api.GroupName });
+                options.OperationFilter<SwaggerExcludeFilter>();
+                options.SchemaFilter<SwaggerExcludeFilter>();
             });
         }
 
@@ -47,7 +51,7 @@ namespace StorefrontCommunity.Menu.API.Extensions
                 setup.SwaggerEndpoint("/swagger/v1/swagger.json", "Menu API");
                 setup.DefaultModelsExpandDepth(-1);
                 setup.DocExpansion(DocExpansion.List);
-                setup.DocumentTitle = "StorefrontCommunity Community";
+                setup.DocumentTitle = "Storefront Community";
                 setup.RoutePrefix = string.Empty;
             });
         }
