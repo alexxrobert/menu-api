@@ -18,7 +18,8 @@ namespace StorefrontCommunity.Menu.API.Models.IntegrationModel.EventBus.RabbitMQ
                 var connectionFactory = new ConnectionFactory()
                 {
                     Uri = new Uri(options.Value.Host),
-                    AutomaticRecoveryEnabled = true
+                    AutomaticRecoveryEnabled = true,
+                    DispatchConsumersAsync = true
                 };
 
                 return connectionFactory.CreateConnection();
