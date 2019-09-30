@@ -43,6 +43,7 @@ namespace StorefrontCommunity.Menu.API
             services.AddDefaultCorsPolicy();
             services.AddJwtAuthentication(_configuration.GetSection("JWT"));
             services.AddSwaggerDocumentation();
+            services.AddRabbitMQConnection();
 
             services.AddScoped<IMessageBroker, RabbitMQBroker>();
 
